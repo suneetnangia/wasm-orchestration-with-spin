@@ -23,7 +23,12 @@ The approach is straightforward, and described by the following steps:
 3. Deploy Spin app to this node pool
 4. Deploy standard container apps to this node pool i.e. Redis in this instance
 
-This will run the standard Spin application which may contain multiple wasm components/modules as part of it. These components communicate with each other using Spin SDKs (for KV, Redis or Http). This approach allows decoupling these components via messaging (Redis) or contracts (Http REST) and this is great. On the flip side though, by introducing external means to communicate between the components, additional overheads become inevitable.
+This will run the standard Spin application which may contain multiple wasm components/modules as part of it. These components communicate with each other using Spin SDKs (for KV, Redis or Http). This approach allows decoupling these components via messaging (Redis) or contracts (Http REST) and this is great. On the flip side though, by introducing external means to communicate between the components, additional overheads become inevitable. 
+
+Below diagram compares and contrast the differences between the use of external services for inter module/component communication and an approach where we avoid this. On left, Pod A has four wasm components/modules, communication between these components occur via external service (Redis in this case). Should we not need to expose these events to external (to Spin app) entities we really do not need to cross the network boundary here.
+Now compare this with Pod C, where inter module/component communication occur via a Spin plugin, the event/messages stay within the same Spin app and no network boundary is crossed. When event/messages do need to be exposed to external world they can certainly do that. This approach is defined in [Reduced Network Hop](#reduced-network-hops) section below.
+
+![alt text](images/mixed_workloads.png "Mixed Workloads Approach")
 
 Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of modules can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialisation-deserialization of messages. WIT contracts defined in the custom Plugin allows a contract driven development of wasm modules/components in a polyglot manner.
 
@@ -33,4 +38,8 @@ The next section below addresses this aspect of the solution in Spin.
 
 This approach enables intra Spin (within the same Spin instance) module/component orchestration using WIT contracts at the host level. It makes use of the plugin model extensibility Spin provides to build a domain specific orchestrator (a custom plugin). Domain specific plugin references a set of WIT contracts for multiple Wasm modules/components and invoke functions on wasm modules/components as per domain specific logic. These composed services may eventually then interact with other services (could be Spin based or otherwise) on the network using standard Spin SDKs e.g. Http.
 
-![alt text](images/mixed_workloads.png "Mixed Workloads Approach")
+## Deployment
+
+[Steps to deploy solution with reduced network hops in Azure]
+
+1. Ensure Docker Desktop is installed and setup with ["Use containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature.
