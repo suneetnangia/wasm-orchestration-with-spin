@@ -1,0 +1,17 @@
+# spin_manifest_version = "1"
+# Spin shim for containerd supports only old version tag
+spin_version = "1"
+authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
+description = "Entry point for application in Spin"
+name = "entry"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "entry"
+source = "target/wasm32-wasi/release/entry.wasm"
+allowed_http_hosts = []
+[component.trigger]
+route = "/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
