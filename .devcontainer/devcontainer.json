@@ -9,7 +9,7 @@
 	"features": {
 		// Using this feature to allow making use of host docker desktop with wasm support i.e. --platform wasi/wasm
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-	}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -33,7 +33,8 @@
 				"usernamehw.errorlens",
 				"gruntfuggly.todo-tree",				
 				"github.copilot",
-				"github.copilot-chat",
+				"github.copilot-chat",				
+				"ms-vscode.makefile-tools",
 				"davidanson.vscode-markdownlint"
 			]
 		}

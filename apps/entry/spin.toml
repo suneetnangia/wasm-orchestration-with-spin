@@ -5,7 +5,7 @@ authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
 description = "Entry point for application in Spin"
 name = "entry"
 trigger = { type = "http", base = "/" }
-version = "0.1.0"
+version = "0.7.0"
 
 [[component]]
 id = "entry"
