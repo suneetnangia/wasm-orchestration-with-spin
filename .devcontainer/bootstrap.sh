@@ -25,6 +25,9 @@ spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plug
 az extension add --name aks-preview
 az extension update --name aks-preview
 
+# Install Redis on Local Docker
+# docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+
 # TODO: Move this to workload cluster creation script
 # az login
 # az feature register --namespace "Microsoft.ContainerService" --name "WasmNodePoolPreview"

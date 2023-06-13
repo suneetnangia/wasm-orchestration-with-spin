@@ -18,7 +18,7 @@ const REDIS_CHANNEL_ENV: &str = "REDIS_CHANNEL";
 fn handle_entry(req: Request) -> Result<Response> {
     let address = std::env::var(REDIS_ADDRESS_ENV)?;
     let channel = std::env::var(REDIS_CHANNEL_ENV)?;
-
+    
     println!("{:?}", req.headers());
 
     let status_code = 200;
@@ -32,11 +32,10 @@ fn handle_entry(req: Request) -> Result<Response> {
         .body(Some(response_body.into()))?;
 
     // Send message to Redis channel.
-    // Get the message to publish from the Redis key "mykey"
-    let payload = redis::get(&address, "order001").map_err(|_| anyhow!("Error querying Redis"))?;
+    let payload = b"Ord0001";
 
     // Publish to Redis
-    let _ = match redis::publish(&address, &channel, &payload) {
+    let _ = match redis::publish(&address, &channel, payload) {
         Ok(()) => Ok(http::Response::builder().status(200).body(None)?),
         Err(_e) => internal_server_error(),
     };

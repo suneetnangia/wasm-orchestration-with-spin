@@ -2,7 +2,8 @@ spin_manifest_version = "1"
 authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
 description = ""
 name = "eventprocessor"
-trigger = { type = "redis", address = "redis://localhost:6379" }
+# 172.17.0.1 is the default docker interface IP address
+trigger = { type = "redis", address = "redis://172.17.0.1:6379" }
 version = "0.1.0"
 
 [[component]]
@@ -10,6 +11,6 @@ id = "eventprocessor"
 source = "target/wasm32-wasi/release/eventprocessor.wasm"
 allowed_http_hosts = []
 [component.trigger]
-channel = "orders"
+channel = "telemetry"
 [component.build]
 command = "cargo build --target wasm32-wasi --release"
