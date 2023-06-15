@@ -1,8 +1,10 @@
 # Installs latest stable toolchain for Rust and clippy/fmt for this toolchain
-rustup update stable && rustup default stable && rustup component add clippy rustfmt
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+$HOME/.cargo/bin/rustup update stable && $HOME/.cargo/bin/rustup default stable && $HOME/.cargo/bin/rustup component add clippy rustfmt
 
 # Installs wasm32 compiler targets
-rustup target add wasm32-wasi wasm32-unknown-unknown
+$HOME/.cargo/bin/rustup target add wasm32-wasi wasm32-unknown-unknown
 
 # Install Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

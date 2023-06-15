@@ -2,4 +2,5 @@
 # If more Spin apps are added to the solution, they should be referenced here.
 members = [
     "apps/entry",
+    "apps/eventprocessor",
 ]
