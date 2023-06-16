@@ -5,9 +5,6 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
 	"features": {
-		// "ghcr.io/devcontainers/features/rust:1": {},
-		// "devwasm.azurecr.io/dev-wasm/dev-wasm-feature/rust-wasi:0": {},
-		// "ghcr.io/lee-orr/rusty-dev-containers/wasm32-unknown-unknown:0": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 
