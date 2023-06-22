@@ -1,47 +1,115 @@
-# Mixed Workloads with Web Assemblies (Spin) & Containers, with Reduced Network Hops
+<div align="center">
+  <h1>Fermyon Spin</h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/static/image/logo-dark.png">
+    <img alt="spin logo" src="./docs/static/image/logo.png" width="300" height="128">
+  </picture>
+  <p>Spin is a framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly.</p>
+      <a href="https://github.com/fermyon/spin/actions/workflows/build.yml"><img src="https://github.com/fermyon/spin/actions/workflows/build.yml/badge.svg" alt="build status" /></a>
+      <a href="https://discord.gg/eGN8saYqCk"><img alt="Discord" src="https://img.shields.io/discord/926888690310053918?label=Discord"></a>
+</div>
 
-## Background
+## What is Spin?
 
-Web assembly(Wasm) is positioned to be the next interation of serverless compute ecosystem, the serverless aspect of wasm is hugely attractive as it allows you to write functions in a decoupled and portable manner. Decoupled, because you write functions' code which is not dependent on the host and environment (cloud provider bindings) it's running in, Matt Butcher from Fermyon wrote an amazing article on this [here](https://www.fermyon.com/blog/next-generation-of-serverless-is-happening?utm_content=251765820&utm_medium=social&utm_source=twitter&hss_channel=tw-1444404500437995520) which sets the context right away. Portability aspect of wasm comes from the fact that you compile your code to a wasm bytecode (like .Net MSIL or Java Bytecode) and this bytecode can then run independent of the host architecture in wasm runtimes (e.g. wasmtime).
-Conviced? anyhow, this repo is less about convincing you to make use of wasm, it's more about how you can run wasm functions (also know as mmodules or components) along side conventional containers; this is likely to be the most common use case when you start to consider wasm for your solution, one of the reasons for that could well be that wasm is not currently ready for running server workloads e.g. DBs, for that a conventional container is still a better (or only) choice. Since Kubernetes (K8s) is one of the most commonly used platforms for orchestrating containers, it would make sense to use it as a starting point to run mixed workloads. This repo makes use of AKS which is Azure's managed K8s service.
+Spin is an open source framework for building and running fast, secure, and
+composable cloud microservices with WebAssembly. It aims to be the easiest way
+to get started with WebAssembly microservices, and takes advantage of the latest
+developments in the
+[WebAssembly component model](https://github.com/WebAssembly/component-model)
+and [Wasmtime](https://wasmtime.dev/) runtime.
 
-## How Do We Run Wasm on AKS
+Spin offers a simple CLI that helps you create, distribute, and execute
+applications, and in the next sections we will learn more about Spin
+applications and how to get started.
 
-AKS is Azure's managed K8s service, which allows creating a node pool with wasm based [containerd shims](https://github.com/deislabs/containerd-wasm-shims). Containerd shims create a layer between K8s and low level container runtimes, this mechanism is used to K8s to run wasm based containers instead of standard containers. Currently, at the time of writing this document, AKS supported two wasm based containerd shims i.e. [Spin and Slight](https://learn.microsoft.com/en-us/azure/aks/use-wasi-node-pools#limitations). These shims inturn make use of [runwasi](https://github.com/containerd/runwasi) runtime (like runc for standard containers) which is responsible for running wasm based containers instead of standard containers. This relationship is depicted in the diagram below:
+## Getting started
 
-![Container Shims Relationships](images/container_shims.png "Container Shims Relationships")
+See the [Install Spin](https://developer.fermyon.com/spin/install) page of the [Spin documentation](https://developer.fermyon.com/spin/index) for a detailed
+guide on installing and configuring Spin, but in short run the following commands:
+```bash
+curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+sudo mv ./spin /usr/local/bin/spin
+```
 
-Other aspect of running wasm based containers on K8s is related to the packaging of applications, it would be prudent if we make use of the existing toolchain which is familair to native K8s users. Spin leverages this by bundling wasm based apps and their dependencies (any static files or configs) in an OCI container image. This is great for versioning, storing and releasing of wasm based application packages as you can make use of your usual container registries and tagging mechanisms. As the base image used by container images of wasm applications in Spin is [scratch](https://hub.docker.com/_/scratch), the size is substantially smaller than standard OS based container images.
-Wasm shim for Spin then unpacks/removes the content of the image before running the application.
+Alternatively, you could [build Spin from source](https://developer.fermyon.com/spin/contributing/).
 
-[Expand to include k8s runtimeclass resource kind]
+To get started writing apps, follow the [quickstart guide](https://developer.fermyon.com/spin/quickstart/),
+and then follow the
+[Rust](https://developer.fermyon.com/spin/rust-components/), [JavaScript](https://developer.fermyon.com/spin/javascript-components), [Python](https://developer.fermyon.com/spin/python-components), or [Go](https://developer.fermyon.com/spin/go-components/)
+language guides, and the [guide on writing Spin applications](https://developer.fermyon.com/spin/configuration/).
 
-## Solution Approach
+## Usage
+Below is an example of using the `spin` CLI to create a new Spin application.  To run the example you will need to install the `wasm32-wasi` target for Rust.
 
-The approach is straightforward, and described by the following steps:
+```bash
+$ rustup target add wasm32-wasi
+```
 
-1. Deploy AKS cluster
-2. Create a [node pool with wasm shims](https://learn.microsoft.com/en-us/azure/aks/use-wasi-node-pools) pre-deployed on it
-3. Deploy Spin app to this node pool
-4. Deploy standard container apps to this node pool i.e. Redis in this instance
+First, run the `spin new` command to create a Spin application from a template.
+```bash
+# Create a new Spin application named 'hello-rust' based on the Rust http template, accepting all defaults
+$ spin new --accept-defaults http-rust hello-rust
+```
+Running the `spin new` command created a `hello-rust` directory with all the necessary files for your application. Change to the `hello-rust` directory and build the application with `spin build`, then run it locally with `spin up`:
 
-This will run the standard Spin application which may contain multiple wasm components/modules as part of it. These components communicate with each other using Spin SDKs (for KV, Redis or Http). This approach allows decoupling these components via messaging (Redis) or contracts (Http REST) and this is great. On the flip side though, by introducing external means to communicate between the components, additional overheads become inevitable.
+```bash
+# Compile to Wasm by executing the `build` command.
+$ spin build
+Executing the build command for component hello-rust: cargo build --target wasm32-wasi --release
+    Finished release [optimized] target(s) in 0.03s
+Successfully ran the build command for the Spin components.
 
-The diagram below compares and contrasts the differences between the use of external services for inter module/component communication and an approach where we avoid this. On the left-hand side, Pod A has four wasm components/modules, communication between these components occur via an external service (Redis in this case). Should we not need to expose these events to external (to Spin app) entities or there's a need for async communication, we really do not need to cross the network boundary here.
-Now compare this with Pod D (on the right), where inter module/component communication occur via a custom Spin plugin, the event/messages stay within the same Spin app and no network boundary is crossed. When event/messages do need to be exposed to external world they can certainly do that. This approach is defined in [Reduced Network Hop](#reduced-network-hops) section below.
+# Run the application locally.
+$ spin up
+Logging component stdio to ".spin/logs/"
 
-![Mixed Workloads Approach](images/mixed_workloads.png "Mixed Workloads Approach")
+Serving http://127.0.0.1:3000
+Available Routes:
+  hello-rust: http://127.0.0.1:3000 (wildcard)
+```
 
-Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of modules can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialisation-deserialization of messages. WIT contracts defined in the custom plugin allows a contract driven development of wasm modules/components in a polyglot manner.
+That's it! Now that the application is running, use your browser or cURL in another shell to try it out:
 
-The next section below addresses this aspect of the solution in Spin.
+```bash
+# Send a request to the application.
+$ curl -i 127.0.0.1:3000
+HTTP/1.1 200 OK
+foo: bar
+content-length: 14
+date: Thu, 13 Apr 2023 17:47:24 GMT
 
-### Reduced Network Hops
+Hello, Fermyon         
+```
+You can make the app do more by editting the `src/lib.rs` file in the `hello-rust` directory using your favorite editor or IDE. To learn more about writing Spin applications see [Writing Applications](https://developer.fermyon.com/spin/writing-apps) in the Spin documentation.  To learn how to publish and distribute your application see the [Publishing and Distribution](https://developer.fermyon.com/spin/distributing-apps) guide in the Spin documentation.
 
-This approach enables intra Spin (within the same Spin instance) module/component orchestration using WIT contracts at the host level. It makes use of the plugin model extensibility Spin provides to build a domain specific orchestrator (a custom plugin). Domain specific plugin references a set of WIT contracts for multiple Wasm modules/components and invoke functions on wasm modules/components as per domain specific logic. These composed services may eventually then interact with other services (could be Spin based or otherwise) on the network using standard Spin SDKs e.g. Http.
+For more information on the cli commands and subcommands see the [CLI Reference](https://developer.fermyon.com/common/cli-reference).
 
-## Deployment
+## Language Support for Spin Features
 
-[Steps to deploy solution with reduced network hops in Azure]
+The table below summarizes the [feature support](https://developer.fermyon.com/spin/language-support-overview) in each of the language SDKs.
 
-1. Ensure Docker Desktop is installed and setup with ["Use containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature.
+| Feature | Rust SDK Supported? | TypeScript SDK Supported? | Python SDK Supported? | Tiny Go SDK Supported? | C# SDK Supported? |
+|-----|-----|-----|-----|-----|-----|
+| **Triggers** |
+| [HTTP](https://developer.fermyon.com/spin/http-trigger) | Supported | Supported | Supported | Supported | Supported |
+| [Redis](https://developer.fermyon.com/spin/redis-trigger) | Supported | Not Supported | Not Supported | Supported | Not Supported |
+| **APIs** |
+| [Outbound HTTP](https://developer.fermyon.com/spin/rust-components.md#sending-outbound-http-requests) | Supported | Supported | Supported | Supported | Supported |
+| [Key Value Storage](https://developer.fermyon.com/spin/kv-store.md) | Supported | Supported | Supported | Supported | Not Supported |
+| [MySQL](https://developer.fermyon.com/spin/rdbms-storage#using-mysql-and-postgresql-from-applications) | Supported | Not Supported | Not Supported | Not Supported | Not Supported |
+| [PostgreSQL](https://developer.fermyon.com/spin/rdbms-storage#using-mysql-and-postgresql-from-applications) | Supported | Not Supported | Not Supported | Not Supported | Supported |
+| [Outbound Redis](https://developer.fermyon.com/spin/rust-components.md#storing-data-in-redis-from-rust-components) | Supported | Supported | Supported | Supported | Supported |
+| **Extensibility** |
+| [Authoring Custom Triggers](https://developer.fermyon.com/spin/extending-and-embedding) | Supported | Not Supported | Not Supported | Not Supported | Not Supported |
+
+## Contributing
+
+We are delighted that you are interested in making Spin better! Thank you!
+Please follow the [contributing guide](https://developer.fermyon.com/spin/contributing).
+And join our [Discord server](https://discord.gg/eGN8saYqCk).
+
+## Stay in Touch
+Follow us on Twitter: [@spinframework](https://twitter.com/spinframework)
+
+You can join the Spin community in our [Discord server](https://discord.gg/eGN8saYqCk) where you can ask questions, get help, and show off the cool things you are doing with Spin!
+
