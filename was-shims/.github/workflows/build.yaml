@@ -1,0 +1,59 @@
+name: build
+on:
+  workflow_call:
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  build:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - {
+              os: "ubuntu-latest",
+              arch: "x86_64",
+            }
+          - {
+              os: "ubuntu-latest",
+              arch: "aarch64"
+            }
+    env:
+      ARCH: ${{ matrix.config.arch }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            "containerd-shim-slight-v1 -> target"
+            "containerd-shim-spin-v1 -> target"
+            "containerd-shim-wws-v1 -> target"
+      - name: "Install Rust Wasm targets"
+        run: |
+          rustup target add wasm32-wasi
+          rustup target add wasm32-unknown-unknown
+      - name: "Install dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install protobuf-compiler -y
+      - name: build
+        run: |
+          make build
+      - name: lowercase the runner OS name
+        shell: bash
+        run: |
+          OS=$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')
+          echo "RUNNER_OS=$OS" >> $GITHUB_ENV
+      - name: package release assets
+        run: |
+          mkdir _dist
+          cp containerd-shim-slight-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/containerd-shim-*-v1 _dist/
+          cp containerd-shim-spin-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/containerd-shim-*-v1 _dist/
+          cp containerd-shim-wws-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/containerd-shim-*-v1 _dist/
+          cd _dist
+          tar czf containerd-wasm-shims-v1-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz containerd-shim-*-v1
+      - name: upload shim artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: containerd-wasm-shims-v1-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}
+          path: _dist/containerd-wasm-shims-v1-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz
+          retention-days: 5
