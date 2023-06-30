@@ -31,7 +31,9 @@
 				"gruntfuggly.todo-tree",				
 				"github.copilot-chat",				
 				"ms-vscode.makefile-tools",
-				"davidanson.vscode-markdownlint"
+				"davidanson.vscode-markdownlint",
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"inercia.vscode-k3d"
 			]
 		}
 	}	

@@ -1,3 +1,7 @@
+spin_build:
+	@echo "Building application..."
+	spin build
+
 k8s_build:
 	@echo "Copying target folder from parent workspace to app folder..."
 	cp -r ../../target .

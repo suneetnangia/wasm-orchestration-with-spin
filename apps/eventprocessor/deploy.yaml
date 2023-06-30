@@ -15,7 +15,7 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: eventprocessor
-          image: hybridwasm/eventprocessor:0.1.0
+          image: eventprocessor:latest
           command: ["/"]
 ---
 apiVersion: v1

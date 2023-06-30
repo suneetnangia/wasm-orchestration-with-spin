@@ -12,10 +12,10 @@ spec:
       labels:
         app: entry
     spec:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-      runtimeClassName: wasmtime-spin-v1
+      runtimeClassName: wasmtime-spin
       containers:
         - name: entry
-          image: hybridwasm.azurecr.io/entry:0.7.0
+          image: entry:latest
           command: ["/"]
 ---
 apiVersion: v1
