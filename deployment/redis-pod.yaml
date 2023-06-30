@@ -4,24 +4,24 @@ metadata:
   name: redis
 spec:
   containers:
-  - name: redis
-    image: redis:5.0.4
-    command:
-      - redis-server
-      - "/redis-master/redis.conf"
-    env:
-    - name: MASTER
-      value: "true"
-    ports:
-    - containerPort: 6379
-    resources:
-    - limits:
-      cpu: "0.1"
-    volumeMounts:
-    - mountPath: /redis-master-data
-      name: data
-    - mountPath: /redis-master
-      name: config
+    - name: redis
+      image: redis:5.0.4
+      command:
+        - redis-server
+        - "/redis-master/redis.conf"
+      env:
+        - name: MASTER
+          value: "true"
+      ports:
+        - containerPort: 6379
+      resources:
+        limits:
+          cpu: "0.1"
+      volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+        - mountPath: /redis-master
+          name: config
   volumes:
     - name: data
       emptyDir: {}
@@ -29,5 +29,5 @@ spec:
       configMap:
         name: test-redis-config
         items:
-        - key: redis-config
-          path: redis.conf
+          - key: redis-config
+            path: redis.conf

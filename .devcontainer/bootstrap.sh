@@ -1,38 +1,41 @@
 # Installs latest stable toolchain for Rust and clippy/fmt for this toolchain
-# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-# PATHRUSTUP=$HOME/.cargo/bin
-# $PATHRUSTUP/rustup update stable && $PATHRUSTUP/rustup default stable && $PATHRUSTUP/rustup component add clippy rustfmt
-# 
-# # Installs wasm32 compiler targets
-# $PATHRUSTUP/rustup target add wasm32-wasi wasm32-unknown-unknown
-# 
-# # Install Azure CLI
-# curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-# 
-# # Install Kubectl
-# sudo apt-get update
-# sudo apt-get install -y ca-certificates curl
-# sudo mkdir "/etc/apt/keyrings"
-# curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
-# echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-# sudo apt-get update
-# sudo apt-get install -y kubectl
-# 
-# # Install Spin
-# curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
-# sudo mv spin /usr/local/bin/
-# spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
-# 
-# # Install AKS wasm extensions
-# az extension add --name aks-preview
-# az extension update --name aks-preview
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+PATHRUSTUP=$HOME/.cargo/bin
+$PATHRUSTUP/rustup update stable && $PATHRUSTUP/rustup default stable && $PATHRUSTUP/rustup component add clippy rustfmt
 
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo CHANNEL=test sh get-docker.sh --channel test
-sudo chmod -R 777 /etc/docker
-sudo echo '{"features":{"containerd-snapshotter": true}}' >> /etc/docker/daemon.json
+# Installs wasm32 compiler targets
+$PATHRUSTUP/rustup target add wasm32-wasi wasm32-unknown-unknown
+
+# Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Install Kubectl
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+sudo mkdir "/etc/apt/keyrings"
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+# Install Helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Install Spin
+curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
+sudo mv spin /usr/local/bin/
+spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
+
+# Install AKS wasm extensions
+az extension add --name aks-preview
+az extension update --name aks-preview
+
+# for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+# sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+# curl -fsSL https://get.docker.com -o get-docker.sh
+# sudo CHANNEL=test sh get-docker.sh --channel test
+# sudo chmod -R 777 /etc/docker
+# sudo echo '{"features":{"containerd-snapshotter": true}}' >> /etc/docker/daemon.json
 # Install Redis on Local Docker
 # docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
 
