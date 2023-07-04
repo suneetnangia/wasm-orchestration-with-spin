@@ -13,7 +13,7 @@ cp $shimSpinDir/target/release/containerd-shim-spin-v1 $tmpSpinDir
 docker build -t k3d-shim -f $dockerDir/Dockerfile $dockerDir
 
 # Create k3d cluster
-k3d cluster create wasm-cluster --image k3d-shim --api-port 6551 -p '8081:80@loadbalancer' --servers 1
+k3d cluster create wasm-cluster --image k3d-shim -p '8081:80@loadbalancer' --servers 1
 
 # Load Spin runtime
 kubectl apply -f ../apps/runtime/runtime.yaml
