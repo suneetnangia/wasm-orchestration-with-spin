@@ -18,6 +18,6 @@
           "ms-vscode.azure-account",
           "ms-vscode.azurecli",
           "ms-azuretools.vscode-docker",
-      ],
-      "postAttachCommand": "curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash"
+      ],      
+      "postCreateCommand": "sh ./.devcontainer/bootstrap.sh"
   }

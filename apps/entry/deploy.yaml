@@ -16,6 +16,7 @@ spec:
       containers:
         - name: entry
           image: entry:latest
+          imagePullPolicy: Never
           command: ["/"]
 ---
 apiVersion: v1

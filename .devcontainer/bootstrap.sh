@@ -9,6 +9,9 @@ $PATHRUSTUP/rustup target add wasm32-wasi wasm32-unknown-unknown
 # Install Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+# Install k3d
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
 # Install Kubectl
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl

@@ -2,12 +2,11 @@ shimSpinDir=../wasm-shims/containerd-shim-spin-v1
 dockerDir=../wasm-shims/deployments/k3d
 tmpSpinDir=../wasm-shims/deployments/k3d/.tmp/containerd-shim-spin-v1
 
-# Install k3d
-curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
 
 # Build Spin shim
-cargo build --release --manifest-path=$shimSpinDir/Cargo.toml
-cp $shimSpinDir/target/release/containerd-shim-spin-v1 $tmpSpinDir
+# cargo build --release --manifest-path=$shimSpinDir/Cargo.toml
+cp -p ../apps/runtime/containerd-shim-spin-v1 $tmpSpinDir
 
 # Build k3d image
 docker build -t k3d-shim -f $dockerDir/Dockerfile $dockerDir

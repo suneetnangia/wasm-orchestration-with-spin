@@ -17,3 +17,5 @@ tower = "0.4"
 hyper = "0.14"
 curl = "0.4"
 rand = "0.8"
+
+[workspace]
