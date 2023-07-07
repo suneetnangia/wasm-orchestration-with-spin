@@ -19,7 +19,7 @@ helm repo add redis-stack https://redis-stack.github.io/helm-redis-stack/
 helm repo update
 helm upgrade --install redis-stack redis-stack/redis-stack --set-string redis_stack.tag="latest" --reuse-values --namespace redis --create-namespace --wait
 # Replace Helm service
-kubectl apply -f ./helm/redis-stack/service.yaml -n redis
+kubectl apply -f ./redis-stack/service.yaml -n redis
 
 # Build and load workloads
 buildWorkloads()
