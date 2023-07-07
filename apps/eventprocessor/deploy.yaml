@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: eventprocessor
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: eventprocessor
@@ -15,37 +15,6 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: eventprocessor
-          image: hybridwasm/eventprocessor:0.1.0
+          image: eventprocessor:latest
+          imagePullPolicy: Never
           command: ["/"]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: eventprocessor
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    app: eventprocessor
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: eventprocessor
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    kubernetes.io/ingress.class: traefik
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /eventprocessor
-            pathType: Prefix
-            backend:
-              service:
-                name: eventprocessor
-                port:
-                  number: 80
