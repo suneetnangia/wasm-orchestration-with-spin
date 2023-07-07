@@ -15,6 +15,6 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: eventprocessor
-          image: eventprocessor
+          image: eventprocessor:latest
           imagePullPolicy: Never
           command: ["/"]

@@ -29,8 +29,8 @@ buildWorkloads()
   cp -r ../../target .
   # spin k8s build
   mkdir -p tmp
-  docker buildx build -f Dockerfile -t $1:v1 . --load --platform=wasi/wasm32 --provenance=false
-  docker save -o tmp/$1.tar $1:v1
+  docker buildx build -f Dockerfile -t $1:latest . --load --platform=wasi/wasm32 --provenance=false
+  docker save -o tmp/$1.tar $1:latest
   k3d image import tmp/$1.tar -c wasm-cluster
   rm -r tmp
   spin k8s deploy
