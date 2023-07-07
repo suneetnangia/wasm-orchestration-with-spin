@@ -1,3 +1,5 @@
+all: spin_build k8s_build k8s_push k8s_deploy
+
 spin_build:
 	@echo "Building application..."
 	spin build
