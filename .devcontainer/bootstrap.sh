@@ -29,9 +29,6 @@ curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
 sudo mv spin /usr/local/bin/
 spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
 
-# Install k3d
-curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-
 # Install AKS wasm extensions
 az extension add --name aks-preview
 az extension update --name aks-preview
