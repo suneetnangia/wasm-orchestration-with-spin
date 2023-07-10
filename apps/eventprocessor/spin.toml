@@ -1,9 +1,9 @@
-spin_manifest_version = "1"
+spin_version = "1"
 authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
 description = ""
 name = "eventprocessor"
-# 172.17.0.1 is the default docker interface IP address
-trigger = { type = "redis", address = "redis://172.17.0.1:6379" }
+# Ip address is statically configured in redis service yaml
+trigger = { type = "redis", address = "redis://10.43.236.144:6379" }
 version = "0.1.0"
 
 [[component]]
