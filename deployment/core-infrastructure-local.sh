@@ -9,7 +9,7 @@ cp -p ../apps/runtime/containerd-shim-spin-v1 $tmpSpinDir/containerd-shim-spin-v
 docker build -t k3d-shim -f $dockerDir/Dockerfile $dockerDir
 
 # Create k3d cluster
-k3d cluster create wasm-cluster --image k3d-shim --api-port 6551 -p '8001:30010@loadbalancer' --servers 1
+k3d cluster create wasm-cluster --image k3d-shim --api-port 6551 -p '8002:30010@loadbalancer' -p '8003:80@loadbalancer' --servers 1
 
 # Load Spin runtime
 kubectl apply -f ../apps/runtime/runtime.yaml
@@ -19,6 +19,7 @@ helm repo add redis-stack https://redis-stack.github.io/helm-redis-stack/
 helm repo update
 helm upgrade --install redis-stack redis-stack/redis-stack --set-string redis_stack.tag="latest" --reuse-values --namespace redis --create-namespace --wait
 # Replace Helm service
+kubectl delete svc redis-stack -n redis
 kubectl apply -f ./redis-stack/service.yaml -n redis
 
 # Build and load workloads
