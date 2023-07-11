@@ -10,8 +10,8 @@ version = "0.7.0"
 [[component]]
 id = "entry"
 source = "target/wasm32-wasi/release/entry.wasm"
-# 172.17.0.1 is the default docker interface IP address
-environment = { REDIS_ADDRESS = "redis://172.17.0.1:6379", REDIS_CHANNEL = "telemetry" }
+# Ip address is statically configured in redis service yaml
+environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379", REDIS_CHANNEL = "telemetry" }
 allowed_http_hosts = []
 [component.trigger]
 route = "/..."

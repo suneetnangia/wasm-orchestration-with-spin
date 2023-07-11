@@ -5,6 +5,9 @@ metadata:
   name: redis-stack
 spec:
   type: NodePort
+  # This cluster ip is static, used by other pods within the cluster, if you change it here change it in other places too.
+  # Change this to service's dns name later.
+  clusterIP: 10.43.236.144
   ports:
     - name: redis-stack-server
       protocol: TCP
@@ -18,22 +21,3 @@ spec:
       nodePort: 30010
   selector:
     app: redis-stack
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: redis-stack
-#   annotations:
-#     ingress.kubernetes.io/ssl-redirect: "false"
-#     kubernetes.io/ingress.class: traefik
-# spec:
-#   rules:
-#     - http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: redis-stack
-#                 port:
-#                   number: 8001
