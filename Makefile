@@ -1,19 +1,20 @@
-dockerDir := ./wasm-shims/deployments/k3d
-tmpSpinDir := ./wasm-shims/deployments/k3d/.tmp
+K3DCLUSTERNAME = wasm-cluster
+DOCKERDIR := ./wasm-shims/deployments/k3d
+TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
 
 all: build_k3d_node_image create_k3d_cluster install_redis deploy_app
 
 build_k3d_node_image:
 	@echo "Copying spin shim..."
-	mkdir -p $(tmpSpinDir)
-	cp -p ./apps/runtime/containerd-shim-spin-v1 $(tmpSpinDir)/containerd-shim-spin-v1
+	mkdir -p $(TMPSPINDIR)
+	cp -p ./apps/runtime/containerd-shim-spin-v1 $(TMPSPINDIR)/containerd-shim-spin-v1
 
 	@echo "Building k3d image..."
-	docker build -t k3d-shim -f $(dockerDir)/Dockerfile $(dockerDir)
+	docker build -t k3d-shim -f $(DOCKERDIR)/Dockerfile $(DOCKERDIR)
 
 create_k3d_cluster:
 	@echo "Creating k3d cluster..."
-	k3d cluster create wasm-cluster --image k3d-shim --api-port 6551 -p '8001:30010@loadbalancer' --servers 1
+	k3d cluster create $(K3DCLUSTERNAME) --image k3d-shim --api-port 6551 -p '8001:30010@loadbalancer' --servers 1
 	@echo "Loading spin runtime..."
 	kubectl apply -f ./apps/runtime/runtime.yaml
 
@@ -32,4 +33,15 @@ deploy_app_entry:
 
 deploy_app_eventprocessor:
 	@echo "Deploying eventprocessor app..."
-	sh ./deployment/deploy-workload.sh eventprocessor
+	sh ./deployment/deploy-workload.sh eventprocessor $(K3DCLUSTERNAME)
+
+clean:
+	@echo "Cleaning up..."
+	k3d cluster delete $(K3DCLUSTERNAME)
+	rm -rf $(tmpSpinDir)
+	cargo clean
+	rm -rf ./apps/entry/target
+	rm -rf ./apps/entry/.spin
+	rm -rf ./apps/eventprocessor/target
+	rm -rf ./apps/eventprocessor/.spin
+	
