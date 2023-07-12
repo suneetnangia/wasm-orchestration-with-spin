@@ -1,3 +1,4 @@
+use std::env::var;
 use anyhow::Result;
 use bytes::Bytes;
 use spin_sdk::{redis_component, redis};
@@ -11,14 +12,14 @@ const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 
 #[redis_component]
 fn on_message(message: Bytes) -> Result<()> {
-    let address: String = std::env::var(REDIS_ADDRESS_ENV)?;
+    let address: String = var(REDIS_ADDRESS_ENV)?;
 
     let message_body =  from_utf8(&message)?;
-    println!("Order received: {}", message_body);
+    println!("Order Received: {}", message_body);
 
-    // Extract order details from request json.    
-    let json_value: Value = serde_json::from_str(message_body)?;
-    let order_id = json_value["id"].as_u64().unwrap() as u32;
+    // Extract order details from request json.
+    let order: Value = serde_json::from_str(message_body)?;
+    let order_id = order["id"].as_u64().unwrap() as u32;
 
     // Update order status in Redis KV store.
     redis::set(&address, &order_id.to_string(), "fulfilled".as_bytes()).unwrap();

@@ -1,7 +1,7 @@
-use anyhow::{anyhow, Result};
-
+use anyhow::Result;
+use std::env::var;
 use spin_sdk::{
-    http::{Request, Response, internal_server_error},
+    http::{Request, Response},
     http_component, redis,
 };
 
@@ -10,31 +10,29 @@ use spin_sdk::{
 // a message to.
 const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 
-/// A simple Spin HTTP component.
+/// Http handler for status provider.
 #[http_component]
-fn handle_entry(req: Request) -> Result<Response> {
-    let address = std::env::var(REDIS_ADDRESS_ENV)?;
+fn handle_statusprovider(req: Request) -> Result<Response> {
+    let address = var(REDIS_ADDRESS_ENV)?;
 
-    let status_code = 200;
-
-    // Extract order id from request.
-    let path = req.uri().path();
-    let order_id = path.split_terminator('/').last().unwrap();
+    // Extract order Id from http query string.
+    let query_string = req.uri().path();
+    let order_id = query_string.split_terminator('/').last().unwrap();
     
-    println!("Order Id: {}", order_id);
+    println!("Received Order Id: {}", order_id);
 
     // Get order status from Redis KV store.
-    let status = redis::get(&address, order_id).unwrap();    
-    let status_val = String::from_utf8(status).unwrap(); 
-
-    // Send pseudo 200 response to client for now.
-    let response_body = format!("{{ \"status\": {:?}}}", status_val);
+    let order_status = redis::get(&address, order_id).unwrap();    
+    let order_status = String::from_utf8(order_status).unwrap(); 
+    
+    let response_body = format!("{{ \"status\": {:?}}}", order_status);
 
     println!("Status Response: {}", response_body);
     
+    // Send Http OK response to client with status details.
     let response = http::Response::builder()
-    .status(status_code)
+    .status(http::StatusCode::OK)
     .body(Some(response_body.into()))?;
 
-        Ok(response)
+    Ok(response)
 }
