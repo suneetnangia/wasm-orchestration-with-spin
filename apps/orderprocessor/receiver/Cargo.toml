@@ -17,6 +17,10 @@ bytes = "1"
 http = "0.2"
 # serde-json is a crate to serialize and deserialize JSON.
 serde_json = "1"
+# serde is a crate to provide serialize and deserialize traits for JSON.
+serde = {version = "*", features = ["derive"] }
+# Random number generator.
+rand = "*"
 # The Spin SDK.
 spin-sdk = { git = "https://github.com/fermyon/spin", tag = "v1.0.0" }
 # Crate that generates Rust Wasm bindings from a WebAssembly interface.

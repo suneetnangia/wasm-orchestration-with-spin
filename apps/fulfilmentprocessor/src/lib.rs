@@ -18,10 +18,10 @@ fn on_message(message: Bytes) -> Result<()> {
 
     // Extract order details from request json.    
     let json_value: Value = serde_json::from_str(message_body)?;
-    let order_id = json_value["order_id"].as_str().unwrap();
+    let order_id = json_value["id"].as_u64().unwrap() as u32;
 
     // Update order status in Redis KV store.
-    redis::set(&address, order_id, "fulfilled".as_bytes()).unwrap();
+    redis::set(&address, &order_id.to_string(), "fulfilled".as_bytes()).unwrap();
 
     Ok(())
 }
