@@ -4,7 +4,7 @@ spin_version = "1"
 authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
 description = "Order processor application in Spin"
 name = "orderprocessor"
-trigger = { type = "http", base = "/" }
+trigger = { type = "http", base = "/order" }
 version = "0.7.1"
 
 [[component]]
@@ -14,7 +14,7 @@ source = "./target/wasm32-wasi/release/receiver.wasm"
 environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379", REDIS_CHANNEL = "neworders" }
 allowed_http_hosts = []
 [component.trigger]
-route = "/receiver"
+route = "/"
 [component.build]
 command = "cargo build --target wasm32-wasi --release"
 
@@ -25,6 +25,6 @@ source = "./target/wasm32-wasi/release/statusprovider.wasm"
 environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379" }
 allowed_http_hosts = []
 [component.trigger]
-route = "/status/..."
+route = "/..."
 [component.build]
 command = "cargo build --target wasm32-wasi --release"

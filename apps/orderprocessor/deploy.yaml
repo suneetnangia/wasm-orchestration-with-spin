@@ -43,17 +43,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /receiver
+          - path: /order
             pathType: Prefix
             backend:
               service:
                 name: orderprocessor
                 port:
-                  number: 80
-          - path: /status/{id}
-            pathType: Prefix
-            backend:
-              service:
-                name: orderprocessor
-                port:
-                  number: 80
+                  number: 80         
