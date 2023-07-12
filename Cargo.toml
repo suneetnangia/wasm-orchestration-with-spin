@@ -1,6 +1,7 @@
 [workspace]
 # If more Spin apps are added to the solution, they should be referenced here.
-members = [
-    "apps/entry",
-    "apps/eventprocessor",
+members = [    
+    "apps/orderprocessor/receiver",
+    "apps/orderprocessor/statusprovider",
+    "apps/fulfilmentprocessor",
 ]

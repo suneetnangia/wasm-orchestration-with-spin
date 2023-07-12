@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eventprocessor
+  name: fulfilmentprocessor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: eventprocessor
+      app: fulfilmentprocessor
   template:
     metadata:
       labels:
-        app: eventprocessor
+        app: fulfilmentprocessor
     spec:
       runtimeClassName: wasmtime-spin
       containers:
-        - name: eventprocessor
-          image: eventprocessor:latest
+        - name: fulfilmentprocessor
+          image: fulfilmentprocessor:latest
           imagePullPolicy: Never
           command: ["/"]

@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: entry
+  name: orderprocessor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: entry
+      app: orderprocessor
   template:
     metadata:
       labels:
-        app: entry
+        app: orderprocessor
     spec:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
       runtimeClassName: wasmtime-spin
       containers:
-        - name: entry
-          image: entry:latest
+        - name: orderprocessor
+          image: orderprocessor:latest
           imagePullPolicy: Never
           command: ["/"]
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: entry
+  name: orderprocessor
 spec:
   type: LoadBalancer
   ports:
@@ -30,23 +30,30 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: entry
+    app: orderprocessor
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: entry
+  name: orderprocessor
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: traefik    
 spec:
   rules:
     - http:
         paths:
-          - path: /entry
+          - path: /receiver
             pathType: Prefix
             backend:
               service:
-                name: entry
+                name: orderprocessor
+                port:
+                  number: 80
+          - path: /status/{id}
+            pathType: Prefix
+            backend:
+              service:
+                name: orderprocessor
                 port:
                   number: 80
