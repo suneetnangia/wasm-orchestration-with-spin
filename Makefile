@@ -1,6 +1,7 @@
-K3DCLUSTERNAME = wasm-cluster
+K3DCLUSTERNAME := wasm-cluster
 DOCKERDIR := ./wasm-shims/deployments/k3d
 TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
+APPSDIR := ./apps
 
 all: build_k3d_node_image create_k3d_cluster install_redis deploy_app
 
@@ -30,11 +31,11 @@ deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor
 
 deploy_app_orderprocessor:
 	@echo "Deploying order processor app..."
-	sh ./deployment/deploy-workload.sh orderprocessor $(K3DCLUSTERNAME)
+	sh ./deployment/build-deploy-workload.sh orderprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
 deploy_app_fulfilmentprocessor:
 	@echo "Deploying fulfilment processor app..."
-	sh ./deployment/deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME)
+	sh ./deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
 clean:
 	@echo "Cleaning up..."

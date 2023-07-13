@@ -11,42 +11,10 @@ spec:
     metadata:
       labels:
         app: orderprocessor
-    spec:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+    spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: orderprocessor
-          image: orderprocessor:latest
+          image: orderprocessor:0.7.1
           imagePullPolicy: Never
           command: ["/"]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: orderprocessor
-spec:
-  type: LoadBalancer
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  selector:
-    app: orderprocessor
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: orderprocessor
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    kubernetes.io/ingress.class: traefik    
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /order
-            pathType: Prefix
-            backend:
-              service:
-                name: orderprocessor
-                port:
-                  number: 80         
