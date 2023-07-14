@@ -15,6 +15,6 @@ spec:
       runtimeClassName: wasmtime-spin
       containers:
         - name: fulfilmentprocessor
-          image: fulfilmentprocessor:latest
+          image: fulfilmentprocessor:0.1.0
           imagePullPolicy: Never
           command: ["/"]

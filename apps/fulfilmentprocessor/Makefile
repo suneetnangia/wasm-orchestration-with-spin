@@ -1,16 +1,12 @@
-all: spin_build k8s_build k8s_push k8s_deploy
+K3DCLUSTERNAME = wasm-cluster
+APPSDIR := ./..
 
-spin_build:
-	@echo "Building application..."
-	spin build
+k3s_build_deploy:
+	@echo "Deploying orderprocessor app..."
+	sh ../../deployment/build-deploy-workload.sh orderprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
-k8s_build:
-	@echo "Copying target folder from parent workspace to app folder..."
-	cp -r ../../target .
-	spin k8s build
-
-k8s_push:
-	spin k8s push
-
-k8s_deploy:
-	spin k8s deploy
+clean:
+	rm -rf ./target
+	rm -rf ./spin
+	cargo clean
+	kubectl delete -f ./deploy.yaml
