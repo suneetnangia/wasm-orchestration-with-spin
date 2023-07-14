@@ -28,30 +28,3 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
 sudo mv spin /usr/local/bin/
 spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
-
-# Install AKS wasm extensions
-az extension add --name aks-preview
-az extension update --name aks-preview
-
-# for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-# sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
-# curl -fsSL https://get.docker.com -o get-docker.sh
-# sudo CHANNEL=test sh get-docker.sh --channel test
-# sudo chmod -R 777 /etc/docker
-# sudo echo '{"features":{"containerd-snapshotter": true}}' >> /etc/docker/daemon.json
-# Install Redis on Local Docker
-# docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
-
-# TODO: Move this to workload cluster creation script
-# az login
-# az feature register --namespace "Microsoft.ContainerService" --name "WasmNodePoolPreview"
-# provider_state="unknown"
-# while [[ "$provider_state" != "Registered" ]]
-# do
-#     provider_state=$(az feature show --namespace "Microsoft.ContainerService" --name "WasmNodePoolPreview" --query "properties.state")
-#     echo "Provider state: $provider_state"
-#     # Todo: exit immediately if provider_state is "Registered"
-#     sleep 3
-# done
-# # Refresh RP registration
-# az provider register --namespace Microsoft.ContainerService
