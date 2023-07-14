@@ -25,9 +25,11 @@ sudo apt-get install -y kubectl
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Install Spin
+mkdir spininstall && cd spininstall
 curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
 sudo mv spin /usr/local/bin/
 spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
+cd ../ && rm -fr spininstall
 
 # Install pip, jg, yq
 sudo apt-get install -y pip
