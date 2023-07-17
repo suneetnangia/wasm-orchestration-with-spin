@@ -51,7 +51,7 @@ Run the sample as follows:
 
   It returns a 202 accepted response including status _created_, the orderId and the url for the status request.
 
-- get status: send GET/[http://127.0.0.1:8002/order/<orderId>](http://127.0.0.1:8002/order/<orderId>)
+- get status: send GET/[http://127.0.0.1:8002/order/\<orderId>](http://127.0.0.1:8002/order/<orderId>)
   
   Once the order has been processed by the fulfilmentprocessor the status changes to _fulfilled_ that is returned in the response message.
 
