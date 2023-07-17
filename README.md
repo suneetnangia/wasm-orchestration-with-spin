@@ -8,7 +8,7 @@ Nevertheless, this repo is less about convincing you to make use of Wasm, it's m
 
 ## How Do We Run Wasm on Kubernetes (K8s)
 
-K8s makes use of containerd shims to replace the underlying container engine, one such shim is provided by Spin (a framework to run wasm components), please refer to [Wasm on K8s doc](docs/wasm-on-k8s.md) for more details.
+K8s makes use of containerd shims to replace the underlying container engine, one such shim is provided for Spin (a framework to run wasm components), please refer to [Wasm on K8s doc](docs/wasm-on-k8s.md) for more details.
 
 ## Solution Overview
 
@@ -17,13 +17,14 @@ This solution builds and deploys a psuedo ordering application to examplify the 
 Following components are the key parts of this solution (arrows show data flow):
 ![Order Processing Solution](images/order-processing.png "Order Processing Solution")
 
-1. K3d Cluster: a local kubernetes cluster running both Wasm containers and standard OCI containers as pods.
-2. Spin Shim: an updated version of Spin shim which includes both http and redis trriggers.
+1. Kubernetes Cluster: a local kubernetes cluster (K3d) running both Wasm containers and standard OCI containers as pods.
+2. Spin Shim: a containerd shim for running Spin apps, updated the Spin shim which includes both http and redis trriggers.
 3. Spin Apps:
+   Spin apps are packaged as OCI container images but Spin shim extracts the Spin config and binaries from it before running the apps directly, containers are only used for packaging Spin apps, not execution.
     1. Order Processor App:
        An app to receive new order and order status requests on http endpoints, contains two wasm components:
        * Receiver: implements Http Accept/202 pattern to acknowledge new order request immediately and publishes order message on Redis pub/sub.
-       * Status Provider: returns order status for the order Id provided in query string (e.g. <http://localhost/order/839284>), by referencing the current status in Redis KV store.
+       * Status Provider: returns order status for the order Id provided in query string (e.g. <http://localhost/order/839284>), by referencing order's current status in Redis KV store.
     2. Fulfilment Processor App:
        An app to recieve published new order message from Redis pub/sub and update status to 'fulfilled' in Redis KV store.
 
