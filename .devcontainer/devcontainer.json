@@ -4,7 +4,7 @@
 	"name": "Ubuntu",	
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile	
 
-    "image": "mcr.microsoft.com/vscode/devcontainers/universal:linux",
+    "image": "FROM mcr.microsoft.com/vscode/devcontainers/universal:2-linux",
     "remoteUser": "codespace",
       "overrideCommand": false,
       "mounts": ["source=codespaces-linux-var-lib-docker,target=/var/lib/docker,type=volume"],
