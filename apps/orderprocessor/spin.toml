@@ -1,5 +1,5 @@
 # spin_manifest_version = "1"
-# Spin shim for containerd supports only old version tag
+# Spin shim for Containerd supports only old version tag
 spin_version = "1"
 authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
 description = "Order processor application in Spin"

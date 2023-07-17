@@ -4,7 +4,7 @@ This document describes the dev setup of the solution.
 
 ## Prerequisites
 
-1. Ensure Docker Desktop is installed and setup with ["Use containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature.
+1. Ensure Docker Desktop is installed and setup with ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature.
 
 ## Load Dev Environment
 
@@ -24,7 +24,7 @@ Repo contains the [devcontainer](../.devcontainer/devcontainer.json) setup that 
 - [helm](https://helm.sh/): Kubernetes package manager based on helm charts
 - ...
 
-Just start the devcontainer by clicking the double-arrow icon in the bottom left corner of VS Code and select `Reopen in Container` or press `F1` and type `Remote-Containers: Reopen in Container`.
+Just start the Dev Container by clicking the double-arrow icon in the bottom left corner of VS Code and select `Reopen in Container` or press `F1` and type `Remote-Containers: Reopen in Container`.
 
 ## Deploy K3d Cluster and Workloads
 
@@ -34,7 +34,7 @@ Run the `make` command in root of the repo.
 
 This command does the following:
 
-1. Deploys k3d cluster called **wasm-cluster** including Spin's containerd shim on the nodes.
+1. Deploys k3d cluster called **wasm-cluster** including Spin's Containerd shim on the nodes.
 2. Deploys Redis-Stack as a pod, which contains Redis server and web UI.
 3. Deploys workload apps which demonstrate a simple asynchronous order process.
 4. Forwards ports to the host machine to allow http endpoints of apps (port 8002) and Redis-Stack UX (port 8001) can be accessed via localhost.
