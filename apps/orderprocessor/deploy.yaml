@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderprocessor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderprocessor
+  template:
+    metadata:
+      labels:
+        app: orderprocessor
+    spec:
+      runtimeClassName: wasmtime-spin
+      containers:
+        - name: orderprocessor
+          image: orderprocessor:0.7.1
+          imagePullPolicy: Never
+          command: ["/"]

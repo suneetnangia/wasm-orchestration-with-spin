@@ -1,6 +1,7 @@
-K3DCLUSTERNAME = wasm-cluster
+K3DCLUSTERNAME := wasm-cluster
 DOCKERDIR := ./wasm-shims/deployments/k3d
 TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
+APPSDIR := ./apps
 
 all: build_k3d_node_image create_k3d_cluster install_redis deploy_app
 
@@ -26,23 +27,23 @@ install_redis:
 	kubectl delete svc redis-stack -n redis
 	kubectl apply -f ./deployment/redis-stack/service.yaml -n redis
 
-deploy_app: deploy_app_entry deploy_app_eventprocessor
+deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor
 
-deploy_app_entry:
-	@echo "Deploying entry app..."
-	sh ./deployment/deploy-workload.sh entry $(K3DCLUSTERNAME)
+deploy_app_orderprocessor:
+	@echo "Deploying order processor app..."
+	sh ./deployment/build-deploy-workload.sh orderprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
-deploy_app_eventprocessor:
-	@echo "Deploying eventprocessor app..."
-	sh ./deployment/deploy-workload.sh eventprocessor $(K3DCLUSTERNAME)
+deploy_app_fulfilmentprocessor:
+	@echo "Deploying fulfilment processor app..."
+	sh ./deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
 clean:
 	@echo "Cleaning up..."
 	k3d cluster delete $(K3DCLUSTERNAME)
 	rm -rf $(TMPSPINDIR)
 	cargo clean
-	rm -rf ./apps/entry/target
-	rm -rf ./apps/entry/.spin
-	rm -rf ./apps/eventprocessor/target
-	rm -rf ./apps/eventprocessor/.spin
+	rm -rf ./apps/orderprocessor/target
+	rm -rf ./apps/orderprocessor/.spin
+	rm -rf ./apps/fulfilmentprocessor/target
+	rm -rf ./apps/fulfilmentprocessor/.spin
 	
