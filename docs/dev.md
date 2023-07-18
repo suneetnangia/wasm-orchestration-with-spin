@@ -69,7 +69,8 @@ Test the sample solution **from the host machine** as follows:
   {
     "task":{
       "href":"/order/434536",
-      "id":434536
+      "id":434536,
+      "status":"created"
       }
   }
   ```
