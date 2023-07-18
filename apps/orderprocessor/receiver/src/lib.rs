@@ -70,7 +70,8 @@ fn generate_http_accept_response (order_id: u32) -> String {
     let mut response_body = json!({
           "task": {
               "href": "",
-              "id": ""
+              "id": "",
+              "status": "created"
           }
     });
   

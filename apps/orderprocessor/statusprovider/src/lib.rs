@@ -25,7 +25,7 @@ fn handle_statusprovider(req: Request) -> Result<Response> {
     let order_status = redis::get(&address, order_id).unwrap();    
     let order_status = String::from_utf8(order_status).unwrap(); 
     
-    let response_body = format!("{{ \"status\": {:?}}}", order_status);
+    let response_body = format!("{{ \"id\": {:?}, \"status\": {:?}}}", order_id, order_status);
 
     println!("Status Response: {}", response_body);
     
