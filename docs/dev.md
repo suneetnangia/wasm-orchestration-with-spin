@@ -39,7 +39,7 @@ This command does the following:
 3. Deploys workload apps which demonstrate a simple asynchronous order process.
 4. Forwards ports to the host machine to allow http endpoints of apps (port 8002) and Redis-Stack UX (port 8001) can be accessed via localhost.
 
-#### Single Spin App Change Loop
+#### (optionally) Single Spin App Change Loop
 
 Follow these steps to test your changes quickly, when you make iterative changes to Spin apps:
 
@@ -50,20 +50,41 @@ We read the version from the spin.toml file, update the deploy.yaml and use this
 
 ### Test the Sample Workloads (`Make Test` coming soon)
 
-Check the sample solution as follows:
+Test the sample solution **from the host machine** as follows:
 
-- Post New Order: POST/[http://localhost:8002/order](http://localhost:8002/order)
+- Post New Order:
+
+  POST/[http://localhost:8002/order](http://localhost:8002/order)
 
   ```json
   {
-      "details": "Your order"
+    "details": "Your order"
+  }
+  ```
+  or `curl -d '{"details":"your order"}' -H "Content-Type: application/json" -X POST http://localhost:8002/order`
+
+  It returns a 202 accepted response with status as _created_, auto generated orderId (id below) and the relative url for the status request endpoint, as below:
+
+  ```json
+  {
+    "task":{
+      "href":"/order/434536",
+      "id":434536
+      }
   }
   ```
 
-  It returns a 202 accepted response with status as _created_, auto generated orderId and the url for the status request endpoint.
-
-- Get Status: GET/[http://localhost:8002/order/\<orderId>](http://localhost:8002/order/<orderId>)
+- Get Status:
+  GET/[http://localhost:8002/order/\<orderId>](http://localhost:8002/order/<orderId>)
   
-  Once the order has been processed by the Fulfilment Processor app (a wasm component in Spin), the status changes to _fulfilled_ and that is returned in the response message.
-
+  or `curl http://localhost:8002/order/<orderId>`
+  
+  Once the order has been processed by the Fulfilment Processor app (a wasm component in Spin), the status changes to _fulfilled_ and that is returned in the response message, as below:
+  
+  ```json
+  {
+    "id": "963051",
+    "status": "fulfilled"
+  }
+  ```
 > you can open the redis-stack dashboard in the browser via [http://localhost:8001](http://localhost:8001) to see how the message is being processed by the apps.
