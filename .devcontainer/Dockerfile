@@ -1,12 +1,12 @@
 # Note: You can use any Debian/Ubuntu based image you want. 
-FROM mcr.microsoft.com/vscode/devcontainers/base:buster
+FROM mcr.microsoft.com/vscode/devcontainers/base:jammy
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
 # [Option] Upgrade OS packages to their latest versions
 ARG UPGRADE_PACKAGES="false"
 # [Option] Enable non-root Docker access in container
-ARG ENABLE_NONROOT_DOCKER="true"
+ARG ENABLE_NONROOT_DOCKER="false"
 # [Option] Use the OSS Moby Engine instead of the licensed Docker Engine
 ARG USE_MOBY="false"
 # [Option] Engine/CLI Version
@@ -14,7 +14,7 @@ ARG DOCKER_VERSION="24.0.0~beta.2"
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
-
+E
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your
 # own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
 ARG USERNAME=automatic

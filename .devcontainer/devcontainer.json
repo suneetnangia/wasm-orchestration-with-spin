@@ -2,8 +2,14 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
 {
 	"name": "Docker in Docker",
-	"dockerFile": "Dockerfile",
-	"runArgs": ["--init", "--privileged"],
+	"build": {
+		"dockerfile": "Dockerfile",
+		"cacheFrom": "brewblox/firmware-devcontainer:bullseye",
+		"args": {
+		  "USERNAME": "vscode",
+		  "BUILDKIT_INLINE_CACHE": "0"
+		}
+	  },
 	"mounts": ["source=dind-var-lib-docker,target=/var/lib/docker,type=volume"],
 	"overrideCommand": false,
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
