@@ -10,7 +10,7 @@ ARG ENABLE_NONROOT_DOCKER="true"
 # [Option] Use the OSS Moby Engine instead of the licensed Docker Engine
 ARG USE_MOBY="false"
 # [Option] Engine/CLI Version
-ARG DOCKER_VERSION="24.0.0~beta.2"
+ARG DOCKER_VERSION="latest"
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
