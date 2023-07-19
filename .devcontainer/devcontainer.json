@@ -4,7 +4,7 @@
 	"name": "Docker in Docker",
 	"dockerFile": "Dockerfile",
 	"runArgs": ["--init", "--privileged"],
-	//"mounts": ["source=dind-var-lib-docker,target=/var/lib/docker,type=volume"],
+	"mounts": ["source=dind-var-lib-docker,target=/var/lib/docker,type=volume"],
 	"overrideCommand": false,
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
