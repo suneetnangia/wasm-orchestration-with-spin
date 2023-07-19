@@ -4,13 +4,13 @@
 	"name": "Docker in Docker",
 	"dockerFile": "Dockerfile",
 	"runArgs": ["--init", "--privileged"],
-	"mounts": ["source=dind-var-lib-docker,target=/var/lib/docker,type=volume"],
+	//"mounts": ["source=dind-var-lib-docker,target=/var/lib/docker,type=volume"],
 	"overrideCommand": false,
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sh ./.devcontainer/bootstrap.sh",
+	//"postCreateCommand": "sh ./.devcontainer/bootstrap.sh",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
