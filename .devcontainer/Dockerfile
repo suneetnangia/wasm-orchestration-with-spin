@@ -1,5 +1,5 @@
 # Note: You can use any Debian/Ubuntu based image you want. 
-FROM mcr.microsoft.com/vscode/devcontainers/base:buster
+FROM mcr.microsoft.com/vscode/devcontainers/base:jammy
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
@@ -8,7 +8,7 @@ ARG UPGRADE_PACKAGES="false"
 # [Option] Enable non-root Docker access in container
 ARG ENABLE_NONROOT_DOCKER="true"
 # [Option] Use the OSS Moby Engine instead of the licensed Docker Engine
-ARG USE_MOBY="true"
+ARG USE_MOBY="false"
 # [Option] Engine/CLI Version
 ARG DOCKER_VERSION="24.0.0~beta.2"
 
