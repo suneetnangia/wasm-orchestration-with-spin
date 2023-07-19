@@ -14,7 +14,7 @@ ARG DOCKER_VERSION="24.0.0~beta.2"
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
-E
+
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your
 # own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
 ARG USERNAME=automatic
