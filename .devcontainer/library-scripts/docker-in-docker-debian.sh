@@ -324,6 +324,8 @@ if [ "${INSTALL_DOCKER_BUILDX}" = "true" ]; then
     echo "(*) Installing buildx ${buildx_version}..."
     buildx_file_name="buildx-v${buildx_version}.linux-${architecture}"
     cd /tmp && wget "https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name}"
+    echo "xxxHOMExxx ${_REMOTE_USER_HOME}"
+    echo "xxxUSERNamexxx ${USERNAME}"
 
     mkdir -p ${_REMOTE_USER_HOME}/.docker/cli-plugins
     mv ${buildx_file_name} ${_REMOTE_USER_HOME}/.docker/cli-plugins/docker-buildx
