@@ -1,4 +1,4 @@
-# Mixed Workloads with Web Assemblies (Spin) & Containers, with Reduced Network Hops
+# Mixed Workloads with Web Assemblies (Spin) & Containers
 
 ## Background
 
@@ -31,7 +31,7 @@ Following components are the key parts of this solution (arrows show data flow):
 Order Processor App's components interact with each other using Spin SDKs (for KV, Redis or Http) which requires network hops. This approach allows decoupling these components via messaging (Redis) or contract first approach (Http REST), and enables cross network placement of these components. On the flip side though, by introducing network to communicate between the components even when these components reside in the same Spin app/host, additional overheads become inevitable.
 Following section attempts to address this overhead by leveraging Spin's extensible ecosystem.
 
-### Reduced Network Hops Approach [WIP]
+### Potentially Reduced Network Hops Approach
 
 Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of components can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialization-deserialization of messages. Should we not need to expose these events to external (to Spin app) entities or there's a need for async communication, we really do not need to cross the network boundary here.
 
