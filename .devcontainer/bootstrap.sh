@@ -1,5 +1,4 @@
 # Installs latest stable toolchain for Rust and clippy/fmt for this toolchain
-sudo sh /workspaces/wasm-orchestration-with-spin/install-docker.sh
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 PATHRUSTUP=$HOME/.cargo/bin
 $PATHRUSTUP/rustup update stable && $PATHRUSTUP/rustup default stable && $PATHRUSTUP/rustup component add clippy rustfmt

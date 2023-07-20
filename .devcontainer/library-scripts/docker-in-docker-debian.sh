@@ -9,11 +9,12 @@
 #
 # Syntax: ./docker-in-docker-debian.sh [enable non-root docker access flag] [non-root user] [use moby] [Engine/CLI Version] [Major version for docker-compose] [azure DNS auto detection flag]
 
-ENABLE_NONROOT_DOCKER=${1:-"false"}
-USERNAME=${2:-"automatic"}
-USE_MOBY=${3:-"false"}
+ENABLE_NONROOT_DOCKER=${1:-"true"}
+USERNAME=${2:-"${_REMOTE_USER:-"automatic"}"}
+USE_MOBY=${3:-"true"}
 DOCKER_VERSION=${4:-"latest"} # The Docker/Moby Engine + CLI should match in version
 DOCKER_DASH_COMPOSE_VERSION=${5:-"v1"} # v1 or v2
+INSTALL_DOCKER_BUILDX="${INSTALLDOCKERBUILDX:-"true"}"
 AZURE_DNS_AUTO_DETECTION=${6:-"true"}
 MICROSOFT_GPG_KEYS_URI="https://packages.microsoft.com/keys/microsoft.asc"
 DOCKER_MOBY_ARCHIVE_VERSION_CODENAMES="buster bullseye bionic focal jammy"
@@ -316,6 +317,29 @@ if [ "${ENABLE_NONROOT_DOCKER}" = "true" ]; then
     usermod -aG docker ${USERNAME}
 fi
 
+if [ "${INSTALL_DOCKER_BUILDX}" = "true" ]; then
+    apt-get -y install --no-install-recommends docker-buildx-plugin
+    # buildx_version="latest"
+    # find_version_from_git_tags buildx_version "https://github.com/docker/buildx" "refs/tags/v"
+
+    # echo "(*) Installing buildx ${buildx_version}..."
+    # buildx_file_name="buildx-v${buildx_version}.linux-${architecture}"
+    # cd /tmp && wget "https://github.com/docker/buildx/releases/download/v${buildx_version}/${buildx_file_name}"
+    # echo "xxxHOMExxx ${_REMOTE_USER_HOME}"
+    # echo "xxxUSERNamexxx ${USERNAME}"
+
+    # mkdir -p ${_REMOTE_USER_HOME}/.docker/cli-plugins
+    # mv ${buildx_file_name} ${_REMOTE_USER_HOME}/.docker/cli-plugins/docker-buildx
+    # chmod +x ${_REMOTE_USER_HOME}/.docker/cli-plugins/docker-buildx
+
+    # chown -R "${USERNAME}:docker" "${_REMOTE_USER_HOME}/.docker"
+    # chmod -R g+r+w "${_REMOTE_USER_HOME}/.docker"
+    # find "${_REMOTE_USER_HOME}/.docker" -type d -print0 | xargs -n 1 -0 chmod g+s
+fi
+
+mkdir -p /etc/docker
+mv /tmp/daemon.json /etc/docker/daemon.json
+
 tee /usr/local/share/docker-init.sh > /dev/null \
 << EOF
 #!/bin/sh
@@ -328,9 +352,6 @@ set -e
 
 AZURE_DNS_AUTO_DETECTION=$AZURE_DNS_AUTO_DETECTION
 EOF
-
-mkdir -p /etc/docker
-mv /tmp/daemon.json /etc/docker/daemon.json
 
 tee -a /usr/local/share/docker-init.sh > /dev/null \
 << 'EOF'
