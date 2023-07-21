@@ -35,8 +35,8 @@ Following section attempts to address this overhead by leveraging Spin's extensi
 
 Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of components can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialization-deserialization of messages. Should we not need to expose these events to external (to Spin app) entities or there's a need for async communication, we really do not need to cross the network boundary here.
 
-We know [Wasm Interface Types (WIT)](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) enables contract based development of wasm components and Spin framework supports this approach as well, natively. Details of this approach are document in a separate [article](docs/orchestrator-plugin.md).
+We know [Wasm Interface Types (WIT)](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) enables contract based development of wasm components and Spin framework supports this approach as well, natively. Details of this approach are documented in a separate [article](docs/orchestrator-plugin.md).
 
-## Local Development/Deployment
+## Codespaces and Local Development/Deployment
 
-Please refer to [dev setup document](docs/dev.md) for local setup of the solution (no cloud services required).
+Please refer to [dev setup document](docs/dev.md) for GitHub Codespaces support and local setup of the solution (no cloud services required).
