@@ -31,7 +31,7 @@ Ensure Docker Engine or Docker Desktop is installed on your machine to create th
     ```
 </details>
 
-### Load Dev Environment
+## Load Dev Environment (Codespace or Local Dev Env)
 
 Clone the repo on your local machine and open it in VS Code
 
