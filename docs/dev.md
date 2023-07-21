@@ -8,10 +8,14 @@ GitHub [Codespaces](https://docs.github.com/en/codespaces/overview) are fully su
 This allows you to use and develop the repository in the cloud, without the need to install any tools on your local machine.
 Since the docker-in-docker approach is implemented and installed during the devcontainer start-up, we can enable the required ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature directly in the image by a setting in the daemon.json file. Hence we can build and run wasm containers in the devcontainer without any dependency to the host machine.
 
-## Prerequisites
+## Load Dev Environment
+
+### Prerequisites
 
 Ensure Docker Engine or Docker Desktop is installed on your machine to create the dev container.
 
+<details>
+<summary>Docker In Docker Alternative</summary>
 > **Note**: if there are problems with the docker-in-docker use, you can enable the ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature in the Docker Desktop settings. Accordingly, the feature to use the Docker of the host machine needs to be activated in the devcontainer.json file and the image can be referenced directly, e.g. as follows:
 
   ```json
@@ -21,8 +25,7 @@ Ensure Docker Engine or Docker Desktop is installed on your machine to create th
       "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
   ```
-
-## Load Dev Environment
+</details>
 
 Clone the repo on your local machine and open it in VS Code
 
