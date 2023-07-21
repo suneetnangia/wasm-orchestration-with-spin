@@ -28,6 +28,7 @@
 				"usernamehw.errorlens",
 				"gruntfuggly.todo-tree",				
 				"github.copilot-chat",				
+				"streetsidesoftware.code-spell-checker",
 				"ms-vscode.makefile-tools",
 				"davidanson.vscode-markdownlint",
 				"ms-kubernetes-tools.vscode-kubernetes-tools",
