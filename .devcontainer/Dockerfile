@@ -1,5 +1,5 @@
 # Note: You can use any Debian/Ubuntu based image you want. 
-FROM mcr.microsoft.com/vscode/devcontainers/base:jammy
+FROM mcr.microsoft.com/vscode/devcontainers/base:bullseye
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
@@ -10,7 +10,7 @@ ARG ENABLE_NONROOT_DOCKER="true"
 # [Option] Use the OSS Moby Engine instead of the licensed Docker Engine
 ARG USE_MOBY="false"
 # [Option] Engine/CLI Version
-ARG DOCKER_VERSION="24.0.4"
+ARG DOCKER_VERSION="latest"
 
 # Enable new "BUILDKIT" mode for Docker CLI
 ENV DOCKER_BUILDKIT=1
