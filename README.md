@@ -1,4 +1,4 @@
-# Mixed Workloads with Web Assemblies (Spin) & Containers
+# Mixed Workloads with Web Assemblies (Spin) & Containers in Kubernetes
 
 ## Background
 
