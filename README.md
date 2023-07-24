@@ -8,7 +8,7 @@ Nevertheless, this repo is less about convincing you to make use of Wasm, it's m
 
 ## How Do We Run Wasm on Kubernetes (K8s)
 
-K8s makes use of Containerd shims to replace the underlying container engine, one such shim is provided for Spin (a framework to run wasm components), please refer to [Wasm on K8s doc](docs/wasm-on-k8s.md) for more details.
+K8s makes use of [Containerd shims](https://github.com/deislabs/containerd-wasm-shims) to replace the underlying container engine, one such shim is provided for Spin (a framework to run wasm components), please refer to [Wasm on K8s doc](docs/wasm-on-k8s.md) for more details.
 
 ## Solution Overview
 
@@ -28,15 +28,16 @@ Following components are the key parts of this solution (arrows show data flow):
     2. Fulfilment Processor App:
        An app to receive published new order message from Redis pub/sub and update status to 'fulfilled' in Redis KV store.
 
-Order Processor App's components interact with each other using Spin SDKs (for KV, Redis or Http) which requires network hops. This approach allows decoupling these components via messaging (Redis) or contract first approach (Http REST), and enables cross network placement of these components. On the flip side though, by introducing network to communicate between the components even when these components reside in the same Spin app/host, additional overheads become inevitable.
-Following section attempts to address this overhead by leveraging Spin's extensible ecosystem.
+## Codespaces and Local Development/Deployment
 
-### Potentially Reduced Network Hops Approach
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/suneetnangia/wasm-orchestration-with-spin)
+
+Please refer to [dev setup document](docs/dev.md) setup of the solution (no cloud services required).
+
+## Potentially Reduced Network Hops Approach
+
+Order Processor App's components interact with each other using Spin SDKs (for KV, Redis or Http) which requires network hops. This approach allows decoupling these components via messaging (Redis) or contract first approach (Http REST), and enables cross network placement of these components. On the flip side though, by introducing network to communicate between the components even when these components reside in the same Spin app/host, additional overheads become inevitable.
 
 Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of components can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialization-deserialization of messages. Should we not need to expose these events to external (to Spin app) entities or there's a need for async communication, we really do not need to cross the network boundary here.
 
-We know [Wasm Interface Types (WIT)](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) enables contract based development of wasm components and Spin framework supports this approach as well, natively. Details of this approach are documented in a separate [article](docs/orchestrator-plugin.md).
-
-## Codespaces and Local Development/Deployment
-
-Please refer to [dev setup document](docs/dev.md) for GitHub Codespaces support and local setup of the solution (no cloud services required).
+We know [Wasm Interface Types (WIT)](https://github.com/WebAssembly/component-model/blob/main/design/mvp/WIT.md) enables contract based development of wasm components and Spin framework supports this approach as well, natively. A [draft PR in Spin](https://github.com/fermyon/spin/pull/1536) repo is raised to highlight this and potential implementation will follow in a separate repo.
