@@ -8,3 +8,4 @@ debug/
 **/*.rs.bk
 crt.pem
 spin.sig
+spininstall/

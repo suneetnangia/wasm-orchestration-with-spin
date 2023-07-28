@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/base:jammy
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"

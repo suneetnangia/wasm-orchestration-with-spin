@@ -233,73 +233,12 @@ else
             fi
         set -e
 
-        # Install compose
-        apt-get -y install --no-install-recommends moby-compose || err "Package moby-compose (Docker Compose v2) not available for OS ${ID} ${VERSION_CODENAME} (${architecture}). Skipping."
     else
         apt-get -y install --no-install-recommends docker-ce-cli${cli_version_suffix} docker-ce${engine_version_suffix}
-        # Install compose
-        apt-get -y install --no-install-recommends docker-compose-plugin || echo "(*) Package docker-compose-plugin (Docker Compose v2) not available for OS ${ID} ${VERSION_CODENAME} (${architecture}). Skipping."
     fi
 fi
 
 echo "Finished installing docker / moby!"
-
-# Install Docker Compose if not already installed and is on a supported architecture
-if type docker-compose > /dev/null 2>&1; then
-    echo "Docker Compose v1 already installed."
-else
-    target_compose_arch="${architecture}"
-    if [ "${target_compose_arch}" = "amd64" ]; then
-        target_compose_arch="x86_64"
-    fi
-    if [ "${target_compose_arch}" != "x86_64" ]; then
-        # Use pip to get a version that runs on this architecture
-        if ! dpkg -s python3-minimal python3-pip libffi-dev python3-venv > /dev/null 2>&1; then
-            apt_get_update_if_needed
-            apt-get -y install python3-minimal python3-pip libffi-dev python3-venv
-        fi
-        export PIPX_HOME=/usr/local/pipx
-        mkdir -p ${PIPX_HOME}
-        export PIPX_BIN_DIR=/usr/local/bin
-        export PYTHONUSERBASE=/tmp/pip-tmp
-        export PIP_CACHE_DIR=/tmp/pip-tmp/cache
-        pipx_bin=pipx
-        if ! type pipx > /dev/null 2>&1; then
-            pip3 install --disable-pip-version-check --no-cache-dir --user pipx
-            pipx_bin=/tmp/pip-tmp/bin/pipx
-        fi
-        ${pipx_bin} install --pip-args '--no-cache-dir --force-reinstall' docker-compose
-        rm -rf /tmp/pip-tmp
-    else
-        compose_v1_version="1"
-        find_version_from_git_tags compose_v1_version "https://github.com/docker/compose" "tags/"
-        echo "(*) Installing docker-compose ${compose_v1_version}..."
-        curl -fsSL "https://github.com/docker/compose/releases/download/${compose_v1_version}/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
-    fi
-fi
-
-# Install docker-compose switch if not already installed - https://github.com/docker/compose-switch#manual-installation
-current_v1_compose_path="$(which docker-compose)"
-target_v1_compose_path="$(dirname "${current_v1_compose_path}")/docker-compose-v1"
-if ! type compose-switch > /dev/null 2>&1; then
-    echo "(*) Installing compose-switch..."
-    compose_switch_version="latest"
-    find_version_from_git_tags compose_switch_version "https://github.com/docker/compose-switch"
-    curl -fsSL "https://github.com/docker/compose-switch/releases/download/v${compose_switch_version}/docker-compose-linux-${architecture}" -o /usr/local/bin/compose-switch
-    chmod +x /usr/local/bin/compose-switch
-    # TODO: Verify checksum once available: https://github.com/docker/compose-switch/issues/11
-
-    # Setup v1 CLI as alternative in addition to compose-switch (which maps to v2)
-    mv "${current_v1_compose_path}" "${target_v1_compose_path}"
-    update-alternatives --install /usr/local/bin/docker-compose docker-compose /usr/local/bin/compose-switch 99
-    update-alternatives --install /usr/local/bin/docker-compose docker-compose "${target_v1_compose_path}" 1
-fi
-if [ "${DOCKER_DASH_COMPOSE_VERSION}" = "v1" ]; then
-    update-alternatives --set docker-compose "${target_v1_compose_path}"
-else
-    update-alternatives --set docker-compose /usr/local/bin/compose-switch
-fi
 
 # If init file already exists, exit
 if [ -f "/usr/local/share/docker-init.sh" ]; then
