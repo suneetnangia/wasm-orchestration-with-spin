@@ -22,23 +22,24 @@ Ensure Docker Engine or Docker Desktop is installed on your machine to create th
   <summary>Docker In Docker Alternative</summary>
   > **Note**: if there are problems with the docker-in-docker use, you can enable the ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature in the Docker Desktop settings. Accordingly, the feature to use the Docker of the host machine needs to be activated in the devcontainer.json file and the image can be referenced directly, e.g. as follows:
 
-    ```json
-      "name": "Ubuntu",	
-      "image": "mcr.microsoft.com/devcontainers/base:bulleye",
-      "features": {
-        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-      },
-    ```
+```json
+  "name": "Ubuntu",
+  "image": "mcr.microsoft.com/devcontainers/base:bulleye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+```
+
 </details>
 
 ## Load Dev Environment (Codespace or Local Dev Env)
 
 Clone the repo on your local machine and open it in VS Code
 
-    ```bash
-      git clone https://github.com/suneetnangia/wasm-orchestration-with-spin.git && cd wasm-orchestration-with-spin
-      code .
-    ```
+```bash
+git clone https://github.com/suneetnangia/wasm-orchestration-with-spin.git && cd wasm-orchestration-with-spin
+code .
+```
 
 Repo contains the [devcontainer](../.devcontainer/devcontainer.json) setup that installs all required tools and sdks as below:
 
@@ -82,25 +83,25 @@ Test the sample solution **from the host machine** as follows:
 
   POST/[http://localhost:8002/order](http://localhost:8002/order)
 
-      ```json
-      {
-        "details": "Your order"
-      }
-      ```
+```json
+  {
+    "details": "Your order"
+  }
+```
 
   or `curl -d '{"details":"your order"}' -H "Content-Type: application/json" -X POST http://localhost:8002/order`
 
   It returns a 202 accepted response with status as _created_, auto generated orderId (id below) and the relative url for the status request endpoint, as below:
 
-      ```json
-      {
-        "task":{
-          "href":"/order/434536",
-          "id":434536,
-          "status":"created"
-          }
+```json
+  {
+    "task":{
+      "href":"/order/434536",
+      "id":434536,
+      "status":"created"
       }
-      ```
+  }
+```
 
 - Get Status:
   GET/[http://localhost:8002/order/\<orderId>](http://localhost:8002/order/<orderId>)
@@ -109,12 +110,12 @@ Test the sample solution **from the host machine** as follows:
   
   Once the order has been processed by the Fulfilment Processor app (a wasm component in Spin), the status changes to _fulfilled_ and that is returned in the response message, as below:
   
-      ```json
-        {
-          "id": "963051",
-          "status": "fulfilled"
-        }
-      ```
+```json
+  {
+    "id": "963051",
+    "status": "fulfilled"
+  }
+```
 
 > you can open the redis-stack dashboard in the browser via [http://localhost:8001](http://localhost:8001) to see how the message is being processed by the apps.
 
@@ -123,3 +124,9 @@ Test the sample solution **from the host machine** as follows:
 The solution requires the ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature to build images with the wasi/wasm platform target. This feature can be either enbled in Docker Desktop settings or by applying the docker-in-docker approach that makes use of the [Docker Engine](https://docs.docker.com/engine/) and configuration in the /etc/docker/daemon.json file.
 The current implementation uses a Dockerfile in the devcontainer.json where it calls setup scripts to install and starts the docker engine while container creation process.
 This pattern aligns with the official recommendation in the devcontainer feature [documentation](https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/docker-in-docker.md) and as it is outlined in the [sample](https://github.com/microsoft/vscode-dev-containers/tree/main/containers/docker-in-docker). Minor adjustments are added to configure the right parameter set and to copy the daemon.json file into the container.
+
+> **Note**: we do NOT install Docker Compose. If this might be of any relevance and required at a later time, it can be easily added to the installation script as described in the official [Docker Compose install guide](https://docs.docker.com/compose/install/) by adding:
+
+```bash
+apt-get -y install --no-install-recommends docker-compose-plugin
+```
