@@ -3,7 +3,7 @@ DOCKERDIR := ./wasm-shims/deployments/k3d
 TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
 APPSDIR := ./apps
 
-all: build_k3d_node_image create_k3d_cluster install_redis deploy_app
+all: build_k3d_node_image create_k3d_cluster install_redis deploy_app run_integrationtest
 
 build_k3d_node_image:
 	@echo "Copying spin shim..."
@@ -37,6 +37,12 @@ deploy_app_fulfilmentprocessor:
 	@echo "Deploying fulfilment processor app..."
 	sh ./deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
+run_integrationtest:
+	@echo "Running integration test..."
+	cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
+
+test: clean all
+
 clean:
 	@echo "Cleaning up..."
 	k3d cluster delete $(K3DCLUSTERNAME)
@@ -46,4 +52,5 @@ clean:
 	rm -rf ./apps/orderprocessor/.spin
 	rm -rf ./apps/fulfilmentprocessor/target
 	rm -rf ./apps/fulfilmentprocessor/.spin
+	rm -rf ./tests/target
 	

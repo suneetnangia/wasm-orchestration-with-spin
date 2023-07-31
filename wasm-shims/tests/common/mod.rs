@@ -214,7 +214,7 @@ pub async fn retry_get(
         buf.extend_from_slice(data);
         Ok(data.len())
     })?;
-
+    
     loop {
         let res = transfer.perform();
         if res.is_ok() {
