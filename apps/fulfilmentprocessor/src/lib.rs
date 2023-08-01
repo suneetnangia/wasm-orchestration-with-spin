@@ -18,6 +18,7 @@ fn on_message(message: Bytes) -> Result<()> {
     println!("Order Received: {}", message_body);
 
     // Extract order details from request json.
+    // TODO: This can be a typed struct from order-management crate.
     let order: Value = serde_json::from_str(message_body)?;
     let order_id = order["id"].as_u64().unwrap() as u32;
 

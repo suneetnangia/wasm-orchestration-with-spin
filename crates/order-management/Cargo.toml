@@ -1,0 +1,10 @@
+[package]
+name = "order-management"
+authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
+description = "Shared entities for order management apps."
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# serde is a crate to provide serialize and deserialize traits for JSON.
+serde = {version = "*", features = ["derive"] }

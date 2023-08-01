@@ -4,4 +4,5 @@ members = [
     "apps/orderprocessor/receiver",
     "apps/orderprocessor/statusprovider",
     "apps/fulfilmentprocessor",
+    "crates/order-management"
 ]
