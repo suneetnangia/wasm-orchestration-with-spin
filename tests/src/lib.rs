@@ -27,7 +27,7 @@ async fn create_order_test() -> Result<()> {
             // assert status
             assert_eq!(order_created.task.status.to_lowercase(), "created");
             loop {
-                        i += 1;
+                i += 1;
                 // wait for order to be processed and to start next retry
                 tokio::time::sleep(time::Duration::from_secs(INTERVAL_IN_SECS)).await;
                 // get order status from address provided from order creation
