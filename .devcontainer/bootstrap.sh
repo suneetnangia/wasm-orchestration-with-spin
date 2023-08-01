@@ -25,7 +25,13 @@ sudo apt-get install -y kubectl
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Install Spin
-mkdir -p spininstall && cd spininstall
+if [ -d "spininstall" ]
+then
+    echo "Deleting existing spininstall directory..." 
+    rm -fr spininstall
+fi
+
+mkdir spininstall && cd spininstall
 curl -fsSL https://developer.fermyon.com/downloads/install.sh | bash
 sudo mv spin /usr/local/bin/
 spin plugin install -u https://raw.githubusercontent.com/chrismatteson/spin-plugin-k8s/main/k8s.json --yes
@@ -35,6 +41,9 @@ cd ../ && rm -fr spininstall
 sudo apt-get install -y pip
 sudo apt-get install -y jq
 pip install yq
+
+# Install pkg-config
+sudo apt-get install -y pkg-config
 
 # Install AKS wasm extensions
 az extension add --name aks-preview
