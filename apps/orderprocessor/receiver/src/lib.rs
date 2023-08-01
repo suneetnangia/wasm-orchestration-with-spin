@@ -1,12 +1,12 @@
-use std::env::var;
 use anyhow::{anyhow, Result};
-use serde_json::json;
-use serde:: {Serialize, Deserialize};
 use rand::Rng;
+use serde::{Deserialize, Serialize};
+use serde_json::json;
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
 };
+use std::env::var;
 
 // The environment variable is set in `spin.toml` that points to the
 // address of the Redis server that the component will publish
@@ -19,12 +19,12 @@ const REDIS_CHANNEL_ENV: &str = "REDIS_CHANNEL";
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Order {
-   #[serde(default)]
-   id: u32,
-   details: String,
-   // TODO: we will use enum for status.
-   #[serde(default)]
-   status: String,
+    #[serde(default)]
+    id: u32,
+    details: String,
+    // TODO: we will use enum for status.
+    #[serde(default)]
+    status: String,
 }
 
 // New order processing component.
@@ -35,20 +35,20 @@ fn handle_receiver(req: Request) -> Result<Response> {
 
     // Generate random order id
     // TODO: we will move this function to another wasm component as a nano service.
-    let mut order_number_generator = rand::thread_rng();    
+    let mut order_number_generator = rand::thread_rng();
     let order_id = order_number_generator.gen_range(100000..999999);
-    
+
     let http_response_body = generate_http_accept_response(order_id);
 
     let http_response = http::Response::builder()
         .status(http::StatusCode::ACCEPTED)
         .body(Some(http_response_body.into()))?;
-    
+
     // Extract order details from request json and deserialise it.
     let request_body = req.body().clone().ok_or(anyhow!("No request body"))?;
     let order_details = String::from_utf8(request_body.to_vec())?;
-    let mut order: Order = serde_json::from_str(&order_details)?;    
-    
+    let mut order: Order = serde_json::from_str(&order_details)?;
+
     // Update order id and status.
     order.id = order_id;
     order.status = "created".to_string();
@@ -65,8 +65,7 @@ fn handle_receiver(req: Request) -> Result<Response> {
     Ok(http_response)
 }
 
-fn generate_http_accept_response (order_id: u32) -> String {
-
+fn generate_http_accept_response(order_id: u32) -> String {
     let mut response_body = json!({
           "task": {
               "href": "",
@@ -74,7 +73,7 @@ fn generate_http_accept_response (order_id: u32) -> String {
               "status": "created"
           }
     });
-  
+
     response_body["task"]["href"] = format!("/order/{}", order_id).into();
     response_body["task"]["id"] = order_id.into();
 

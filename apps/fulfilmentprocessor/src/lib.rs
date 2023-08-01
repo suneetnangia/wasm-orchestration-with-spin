@@ -1,9 +1,9 @@
-use std::env::var;
 use anyhow::Result;
 use bytes::Bytes;
-use spin_sdk::{redis_component, redis};
-use std::str::from_utf8;
 use serde_json::Value;
+use spin_sdk::{redis, redis_component};
+use std::env::var;
+use std::str::from_utf8;
 
 // The environment variable set in `spin.toml` that points to the
 // address of the Redis server that the component will publish
@@ -14,7 +14,7 @@ const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 fn on_message(message: Bytes) -> Result<()> {
     let address: String = var(REDIS_ADDRESS_ENV)?;
 
-    let message_body =  from_utf8(&message)?;
+    let message_body = from_utf8(&message)?;
     println!("Order Received: {}", message_body);
 
     // Extract order details from request json.
