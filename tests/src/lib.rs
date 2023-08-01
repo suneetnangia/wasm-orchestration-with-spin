@@ -27,6 +27,7 @@ async fn create_order_test() -> Result<()> {
             // assert status
             assert_eq!(order_created.task.status.to_lowercase(), "created");
             loop {
+                        i += 1;
                 // wait for order to be processed and to start next retry
                 tokio::time::sleep(time::Duration::from_secs(INTERVAL_IN_SECS)).await;
                 // get order status from address provided from order creation
@@ -42,11 +43,11 @@ async fn create_order_test() -> Result<()> {
                             .unwrap();
                         
                         // assert status
-                        if order_status.status.to_lowercase().as_str() == ORDER_STATUS_FULFILLED {
-                            assert_eq!(order_status.status.to_lowercase(), ORDER_STATUS_FULFILLED);
+                        if order_status.status.to_lowercase().as_str() == ORDER_STATUS_FULFILLED || i == RETRY_TIMES {
                             assert_eq!(order_status.id, order_created.task.id.to_string());
+                            assert_eq!(order_status.status.to_lowercase(), ORDER_STATUS_FULFILLED);
                             break;
-                        }
+                        }       
                     }
                     _ => {
                         panic!(
@@ -56,10 +57,6 @@ async fn create_order_test() -> Result<()> {
                         );
                     }
                 };
-                i += 1;
-                if i == RETRY_TIMES {
-                    break;
-                }
             }
         }
         _ => {
