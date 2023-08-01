@@ -24,7 +24,7 @@ Ensure Docker Engine or Docker Desktop is installed on your machine to create th
 
 ```json
   "name": "Ubuntu",
-  "image": "mcr.microsoft.com/devcontainers/base:bulleye",
+  "image": "mcr.microsoft.com/devcontainers/base:jammy",
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
@@ -112,7 +112,7 @@ Test the sample solution **from the host machine** as follows:
   
 ```json
   {
-    "id": "963051",
+    "id": "434536",
     "status": "fulfilled"
   }
 ```
