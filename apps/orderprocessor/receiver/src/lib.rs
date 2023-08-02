@@ -1,12 +1,12 @@
 use std::env::var;
 use anyhow::{anyhow, Result};
 use serde_json::json;
-use serde:: {Serialize, Deserialize};
 use rand::Rng;
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
 };
+use order_management::Order;
 
 // The environment variable is set in `spin.toml` that points to the
 // address of the Redis server that the component will publish
@@ -16,16 +16,6 @@ const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 // The environment variable is set in `spin.toml` that specifies
 // the Redis channel that the component will publish to.
 const REDIS_CHANNEL_ENV: &str = "REDIS_CHANNEL";
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Order {
-   #[serde(default)]
-   id: u32,
-   details: String,
-   // TODO: we will use enum for status.
-   #[serde(default)]
-   status: String,
-}
 
 // New order processing component.
 #[http_component]
@@ -67,6 +57,7 @@ fn handle_receiver(req: Request) -> Result<Response> {
 
 fn generate_http_accept_response (order_id: u32) -> String {
 
+    // TODO: This can be a typed object from order-management crate.
     let mut response_body = json!({
           "task": {
               "href": "",
