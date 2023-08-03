@@ -1,5 +1,6 @@
 use anyhow::Result;
 use bytes::Bytes;
+use order_management::Order;
 use serde_json::Value;
 use spin_sdk::{redis, redis_component};
 use std::env::var;
@@ -18,11 +19,10 @@ fn on_message(message: Bytes) -> Result<()> {
     println!("Order Received: {}", message_body);
 
     // Extract order details from request json.
-    let order: Value = serde_json::from_str(message_body)?;
-    let order_id = order["id"].as_u64().unwrap() as u32;
+    let order: Order = serde_json::from_str(message_body)?;
 
     // Update order status in Redis KV store.
-    redis::set(&address, &order_id.to_string(), "fulfilled".as_bytes()).unwrap();
+    redis::set(&address, &order.id.to_string(), "fulfilled".as_bytes()).unwrap();
 
     Ok(())
 }

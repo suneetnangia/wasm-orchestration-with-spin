@@ -685,6 +685,7 @@ dependencies = [
  "hyper",
  "k8s-openapi",
  "kube",
+ "order-management",
  "rand",
  "reqwest",
  "serde",
@@ -1045,6 +1046,13 @@ dependencies = [
  "libc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "order-management"
+version = "0.1.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]

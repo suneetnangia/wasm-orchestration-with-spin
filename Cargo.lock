@@ -64,6 +64,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bytes",
+ "order-management",
  "serde_json",
  "spin-sdk 1.2.1",
  "wit-bindgen-rust",
@@ -123,6 +124,13 @@ name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
+
+[[package]]
+name = "order-management"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "percent-encoding"
@@ -202,6 +210,7 @@ dependencies = [
  "anyhow",
  "bytes",
  "http",
+ "order-management",
  "rand",
  "serde",
  "serde_json",
@@ -347,6 +356,7 @@ dependencies = [
  "anyhow",
  "bytes",
  "http",
+ "order-management",
  "serde_json",
  "spin-sdk 1.0.0",
  "wit-bindgen-rust",
