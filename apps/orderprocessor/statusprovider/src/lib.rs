@@ -1,5 +1,5 @@
 use anyhow::Result;
-use order_management::{Order, OrderCreated, OrderStatus};
+use order_management::{Order, OrderStatus};
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,

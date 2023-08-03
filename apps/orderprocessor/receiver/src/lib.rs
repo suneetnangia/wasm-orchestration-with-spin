@@ -1,12 +1,12 @@
 use anyhow::{anyhow, Result};
-use order_management::Order;
+use order_management::{HttpAcceptTask, Order, OrderAccepted};
 use rand::Rng;
 use serde_json::json;
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
 };
-use std::env::var;
+use std::{env::var, io::Read};
 
 // The environment variable is set in `spin.toml` that points to the
 // address of the Redis server that the component will publish
@@ -28,11 +28,12 @@ fn handle_receiver(req: Request) -> Result<Response> {
     let mut order_number_generator = rand::thread_rng();
     let order_id = order_number_generator.gen_range(100000..999999);
 
-    let http_response_body = generate_http_accept_response(order_id);
+    let payload = generate_http_accept_response(order_id);
+    let payload = serde_json::to_vec(&payload).unwrap();
 
     let http_response = http::Response::builder()
         .status(http::StatusCode::ACCEPTED)
-        .body(Some(http_response_body.into()))?;
+        .body(Some(payload.into()))?;
 
     // Extract order details from request json and deserialise it.
     let request_body = req.body().clone().ok_or(anyhow!("No request body"))?;
@@ -55,18 +56,14 @@ fn handle_receiver(req: Request) -> Result<Response> {
     Ok(http_response)
 }
 
-fn generate_http_accept_response(order_id: u32) -> String {
-    // TODO: This can be a typed object from order-management crate.
-    let mut response_body = json!({
-          "task": {
-              "href": "",
-              "id": "",
-              "status": "created"
-          }
-    });
+fn generate_http_accept_response(order_id: u32) -> OrderAccepted {
+    let task = HttpAcceptTask {
+        href: format!("/order/{}", order_id),
+        id: order_id,
+        status: "created".to_string(),
+    };
 
-    response_body["task"]["href"] = format!("/order/{}", order_id).into();
-    response_body["task"]["id"] = order_id.into();
-
-    response_body.to_string()
+    OrderAccepted {
+        http_accept_task: task,
+    }
 }

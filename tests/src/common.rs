@@ -1,8 +1,6 @@
 use anyhow::Result;
-use order_management::Order;
 use rand::{distributions::Alphanumeric, Rng};
 use reqwest::{Client, Error, Response};
-use serde::{Deserialize, Serialize};
 
 pub async fn send_get(url: &str) -> Result<Response, Error> {
     let client = Client::new();
@@ -29,7 +27,7 @@ pub async fn send_post(url: &str, payload: String) -> Result<Response, Error> {
         .await
 }
 
-pub async fn random_payload() -> String {
+pub async fn random_order_details() -> String {
     let rng = rand::thread_rng();
     let random_string: String = rng
         .sample_iter(&Alphanumeric)

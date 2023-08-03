@@ -1,9 +1,9 @@
 use anyhow::Result;
-use common::{random_payload, send_get, send_post};
+use common::{random_order_details, send_get, send_post};
 use reqwest::StatusCode;
 use std::time;
 mod common;
-use order_management::{OrderCreated, OrderStatus};
+use order_management::{OrderAccepted, OrderStatus};
 
 const MAX_RETRY_ATTEMPTS: u32 = 5;
 const INTERVAL_IN_SECS: u64 = 5;
@@ -18,14 +18,14 @@ async fn create_order_test() -> Result<()> {
     let create_order_url = format!("{}/order", base_url);
 
     // create random payload
-    let payload = random_payload().await;
+    let payload = random_order_details().await;
     // create order
     let response = send_post(&create_order_url, payload).await.unwrap();
 
     match response.status() {
         ACCEPTED => {
             // deserialize response
-            let order_created = response.json::<OrderCreated>().await.unwrap();
+            let order_created = response.json::<OrderAccepted>().await.unwrap();
             // assert status
             assert_eq!(
                 order_created.http_accept_task.status.to_lowercase(),

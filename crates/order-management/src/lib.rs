@@ -20,7 +20,7 @@ pub struct HttpAcceptTask {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct OrderCreated {
+pub struct OrderAccepted {
     #[serde(rename = "task")]
     pub http_accept_task: HttpAcceptTask,
 }
