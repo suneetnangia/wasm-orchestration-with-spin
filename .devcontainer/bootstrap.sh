@@ -42,6 +42,9 @@ sudo apt-get install -y pip
 sudo apt-get install -y jq
 pip install yq
 
+# Install pkg-config
+sudo apt-get install -y pkg-config
+
 # Install AKS wasm extensions
 az extension add --name aks-preview
 az extension update --name aks-preview

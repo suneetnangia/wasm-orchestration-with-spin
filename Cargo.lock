@@ -64,6 +64,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bytes",
+ "order-management",
  "serde_json",
  "spin-sdk 1.2.1",
  "wit-bindgen-rust",
@@ -145,9 +146,9 @@ checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.59"
+version = "1.0.66"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6aeca18b86b413c660b781aa319e4e2648a3e6f9eadc9b47e9038e6fe9f3451b"
+checksum = "18fb31db3f9bddb2ea821cde30a9f70117e3f119938b5ee630b7403aa6e2ead9"
 dependencies = [
  "unicode-ident",
 ]
@@ -355,6 +356,7 @@ dependencies = [
  "anyhow",
  "bytes",
  "http",
+ "order-management",
  "serde_json",
  "spin-sdk 1.0.0",
  "wit-bindgen-rust",
