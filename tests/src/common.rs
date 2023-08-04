@@ -1,6 +1,7 @@
 use anyhow::Result;
 use rand::{distributions::Alphanumeric, Rng};
 use reqwest::{Client, Error, Response};
+use url::Url;
 
 pub async fn send_get(url: &str) -> Result<Response, Error> {
     let client = Client::new();

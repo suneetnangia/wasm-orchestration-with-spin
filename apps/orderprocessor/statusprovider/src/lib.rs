@@ -1,5 +1,5 @@
 use anyhow::Result;
-use order_management::{Order, OrderStatus};
+use order_management::OrderStatus;
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
@@ -26,11 +26,11 @@ fn handle_statusprovider(req: Request) -> Result<Response> {
     let order_status = redis::get(&address, order_id).unwrap();
     let order_status = String::from_utf8(order_status).unwrap();
 
-    let order = OrderStatus {
+    let order_status = OrderStatus {
         id: order_id.to_string(),
         status: order_status,
     };
-    let response_body = serde_json::to_string(&order).unwrap();
+    let response_body = serde_json::to_string(&order_status).unwrap();
 
     println!("Status Response: {}", response_body);
 

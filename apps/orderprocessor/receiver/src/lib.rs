@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Result};
 use order_management::{HttpAcceptTask, Order, OrderAccepted};
 use rand::Rng;
-use serde_json::json;
 use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
@@ -37,8 +36,7 @@ fn handle_receiver(req: Request) -> Result<Response> {
 
     // Extract order details from request json and deserialise it.
     let request_body = req.body().clone().ok_or(anyhow!("No request body"))?;
-    let order_details = String::from_utf8(request_body.to_vec())?;
-    let mut order: Order = serde_json::from_str(&order_details)?;
+    let mut order: Order = serde_json::from_slice(&request_body)?;
 
     // Update order id and status.
     order.id = order_id;

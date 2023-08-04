@@ -4,6 +4,7 @@ use reqwest::StatusCode;
 use std::time;
 mod common;
 use order_management::{OrderAccepted, OrderStatus};
+use url::Url;
 
 const MAX_RETRY_ATTEMPTS: u32 = 5;
 const INTERVAL_IN_SECS: u64 = 5;
@@ -14,13 +15,13 @@ const ORDER_STATUS_FULFILLED: &str = "fulfilled";
 async fn create_order_test() -> Result<()> {
     let mut retry_count = 0;
     let host_port = 8002;
-    let base_url = format!("http://localhost:{}", host_port);
-    let create_order_url = format!("{}/order", base_url);
+    let base_url = Url::parse(format!("http://localhost:{}", host_port).as_str())?;
+    let create_order_url = base_url.join("order")?;
 
     // create random payload
     let payload = random_order_details().await;
     // create order
-    let response = send_post(&create_order_url, payload).await.unwrap();
+    let response = send_post(create_order_url.as_str(), payload).await.unwrap();
 
     match response.status() {
         ACCEPTED => {
@@ -37,8 +38,9 @@ async fn create_order_test() -> Result<()> {
                 tokio::time::sleep(time::Duration::from_secs(INTERVAL_IN_SECS)).await;
                 // get order status from address provided from order creation
                 let get_order_status_url =
-                    format!("{}{}", base_url, order_created.http_accept_task.href);
-                let get_order_status_response = send_get(&get_order_status_url).await.unwrap();
+                    base_url.join(order_created.http_accept_task.href.as_str())?;
+                let get_order_status_response =
+                    send_get(get_order_status_url.as_str()).await.unwrap();
 
                 match get_order_status_response.status() {
                     OK => {

@@ -15,6 +15,7 @@ tower = "0.4"
 hyper = "0.14"
 curl = "0.4"
 rand = "0.8"
+url = "2.4.0"
 # serde-json is a crate to serialize and deserialize JSON.
 serde_json = "1"
 # serde is a crate to provide serialize and deserialize traits for JSON.
