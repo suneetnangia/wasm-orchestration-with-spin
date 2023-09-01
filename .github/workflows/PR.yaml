@@ -15,7 +15,7 @@ jobs:
       run: |
         rm -rf ../workspace
         mkdir -p ../workspace
-        cp -r ./* ../workspace
+        cp -ra ./* ../workspace
         ls -a ../workspace
     - name: build the devcontainer image
       run: |
