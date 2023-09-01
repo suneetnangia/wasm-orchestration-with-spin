@@ -13,6 +13,7 @@ jobs:
         fetch-depth: 0
     - name: copy workspace
       run: |
+        ls -a
         rm -rf ../workspace
         mkdir -p ../workspace
         cp -a ./* ../workspace
