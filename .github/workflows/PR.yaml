@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      name: download code
       with:
         fetch-depth: 0
     - name: build the devcontainer image
@@ -22,3 +23,8 @@ jobs:
     - name: install cluster and workloads
       run: |
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make save_images"
+    - uses: actions/upload-artifact@v3
+      name: Upload artifacts
+      with:
+        name: workload-images
+        path: artifacts/
