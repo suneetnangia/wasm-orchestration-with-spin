@@ -27,7 +27,7 @@ jobs:
       run: |
         rm -rf ../images
         mkdir -p ../images
-        docker cp devcontainer:/codebase/artifacts/ ../images
+        docker cp devcontainer:/workspace/artifacts/ ../images
     - uses: actions/upload-artifact@v3
       name: upload artifacts
       with:
