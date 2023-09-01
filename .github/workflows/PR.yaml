@@ -11,12 +11,17 @@ jobs:
       name: download code
       with:
         fetch-depth: 0
+    - name: copy workspace
+      run: |
+        rm -rf ./workspace
+        mkdir -p ./workspace
+        cp -r ./* ./workspace
     - name: build the devcontainer image
       run: |
         docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
     - name: run the devcontainer image
       run: |
-        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace }},target=/workspace devcontainer
+        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace }}/workspace,target=/workspace devcontainer
     - name: install tools
       run: |
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
@@ -25,11 +30,11 @@ jobs:
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make save_images"
     - name: copy images
       run: |
-        rm -rf ../images
-        mkdir -p ../images
-        docker cp devcontainer:/workspace/artifacts/ ../images
+        rm -rf ./images
+        mkdir -p ./images
+        docker cp devcontainer:/workspace/artifacts/ ./images
     - uses: actions/upload-artifact@v3
       name: upload artifacts
       with:
         name: workload-images
-        path: ../images/
+        path: images/
