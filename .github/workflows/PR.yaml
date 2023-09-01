@@ -25,13 +25,13 @@ jobs:
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make save_images"
     - name: copy images
       run: |
-        mkdir -p ./images
+        rm -rf ./images
+        mkdir -p ../images
         sudo chmod 777 ./artifacts
-        sudo chmod 777 ./images
-        sudo cp -r ./artifacts ./images
-        docker stop devcontainer
+        sudo chmod 777 ../images
+        docker cp devcontainer:/artifacts ../images
     - uses: actions/upload-artifact@v3
       name: upload artifacts
       with:
         name: workload-images
-        path: images/
+        path: ../images/
