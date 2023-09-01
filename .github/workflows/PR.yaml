@@ -26,8 +26,8 @@ jobs:
     - name: copy images
       run: |
         mkdir -p ./images
-        chmod 777 ./artifacts
-        chmod 777 ./images
+        sudo chmod 777 ./artifacts
+        sudo chmod 777 ./images
         cp -r ./artifacts ./images
     - uses: actions/upload-artifact@v3
       name: upload artifacts
