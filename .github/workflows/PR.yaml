@@ -21,10 +21,8 @@ jobs:
         docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
     - name: run the devcontainer image
       run: |
-        pwd
         cd ..
-        pwd
-        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=/home/runner/work/workspace,target=/workspace devcontainer
+        docker run --name devcontainer -d --rm --privileged --mount type=bind,source="$(pwd)"/workspace,target=/workspace devcontainer
     - name: install tools
       run: |
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
