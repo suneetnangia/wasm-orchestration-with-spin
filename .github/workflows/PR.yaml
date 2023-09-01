@@ -16,6 +16,7 @@ jobs:
         rm -rf ../workspace
         mkdir -p ../workspace
         cp -r ./* ../workspace
+        ls ../workspace
     - name: build the devcontainer image
       run: |
         docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
