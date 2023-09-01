@@ -15,7 +15,7 @@ jobs:
         docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
     - name: run the devcontainer image
       run: |
-        docker run --name devcontainer --rm --privileged --mount type=bind,source=${{GITHUB_WORKSPACE},target=/workspace devcontainer
+        docker run --name devcontainer --rm --privileged --mount type=bind,source=${{ github.workspace }},target=/workspace devcontainer
     - name: install tools
       run: |
         docker exec -it devcontainer sh ./workspace/.devcontainer/bootstrap.sh
