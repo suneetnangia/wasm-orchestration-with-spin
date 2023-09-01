@@ -43,6 +43,11 @@ run_integrationtest:
 
 test: clean all
 
+save_images: all
+	@echo "Saving apps images as artifacts..."
+	sh ./deployment/save-image.sh orderprocessor $(APPSDIR)
+	sh ./deployment/save-image.sh fulfilmentprocessor $(APPSDIR)
+
 clean:
 	@echo "Cleaning up..."
 	k3d cluster delete $(K3DCLUSTERNAME)
