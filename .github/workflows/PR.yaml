@@ -18,7 +18,7 @@ jobs:
         docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace }},target=/workspace devcontainer
     - name: install tools
       run: |
-        docker exec -it devcontainer sh ./workspace/.devcontainer/bootstrap.sh
+        docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
     - name: install cluster and workloads
       run: |
-        docker exec -it devcontainer sh -c "cd ./workspace && make save_images"
+        docker exec devcontainer sh -c "cd ./workspace && make save_images"
