@@ -23,8 +23,12 @@ jobs:
     - name: install cluster and workloads
       run: |
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make save_images"
+    - name: copy images
+      run: |
+        mkdir -p ./images
+        cp -r ./artifacts ./images
     - uses: actions/upload-artifact@v3
-      name: Upload artifacts
+      name: upload artifacts
       with:
         name: workload-images
-        path: artifacts/
+        path: images/
