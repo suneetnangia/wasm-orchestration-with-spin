@@ -29,6 +29,7 @@ jobs:
         sudo chmod 777 ./artifacts
         sudo chmod 777 ./images
         sudo cp -r ./artifacts ./images
+        docker stop devcontainer
     - uses: actions/upload-artifact@v3
       name: upload artifacts
       with:
