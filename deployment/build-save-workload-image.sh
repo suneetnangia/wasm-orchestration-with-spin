@@ -11,11 +11,11 @@ VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
 # build the docker image
 docker buildx build -f Dockerfile -t $1:$VERSION . --load --platform=wasi/wasm32 --provenance=false
 
-# tag the image
+# tag the docker image
 docker tag $1:$VERSION $1:latest
 
-# push the image (all-tags option not supported in some daemons versions)
-docker image push $1:$VERSION
-docker image push $1:$VERSION
+# save the docker image
+mkdir -p ../../artifacts
+docker save -o ../../artifacts/$1.tar $1:$VERSION
 
 cd ../..
