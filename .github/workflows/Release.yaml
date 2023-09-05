@@ -26,10 +26,28 @@ jobs:
     - name: install tools
       run: |
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
-    - name: login to ghcr.io
-      run: |
-        docker exec devcontainer sh -c "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
     - name: install cluster and workloads
       run: |
-        docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_push_app_images"
-  
+        docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_save_app_images"
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: import images in host´s Docker
+      run: |
+        docker load --input ./artifacts/orderprocessor.tar
+        docker load --input ./artifacts/fulfilmentprocessor.tar
+    - name: get version and push image orderprocessor 
+      run: |
+        cd ./apps/orderprocessor
+        VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
+        docker push orderprocessor:$VERSION
+        docker push orderprocessor:latest
+    - name: get version and push image fulfilmentprocessor 
+      run: |
+        cd ./apps/fulfilmentprocessor
+        VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
+        docker push fulfilmentprocessor:$VERSION
+        docker push fulfilmentprocessor:latest
