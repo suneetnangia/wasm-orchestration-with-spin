@@ -9,7 +9,7 @@ on:
       - 'apps/**'
 
 jobs:
-  Build-Code:
+  Release-Apps-Images:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
     - name: install tools
       run: |
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
-    - name: install cluster and workloads
+    - name: save workload images
       run: |
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_save_app_images"
     - name: Log in to the Container registry
