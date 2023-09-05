@@ -41,8 +41,8 @@ test: clean all
 
 build_save_app_images:
 	@echo "Build and save apps images to artifacts folder..."
-	sh ./deployment/build-push-workload-image.sh orderprocessor $(APPSDIR)
-	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor $(APPSDIR)
+	sh ./deployment/build-save-workload-image.sh orderprocessor $(APPSDIR)
+	sh ./deployment/build-save-workload-image.sh fulfilmentprocessor $(APPSDIR)
 
 clean:
 	@echo "Cleaning up..."
