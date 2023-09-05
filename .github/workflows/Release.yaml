@@ -4,9 +4,9 @@ on:
   push:
     branches: 
       - main
-    paths:
+    # paths:
       # Only run this when chart file is updated.
-      - 'apps/**'
+      # - 'apps/**'
 
 jobs:
   Release-Apps-Images:
@@ -40,6 +40,8 @@ jobs:
         rm -rf ../images
         mkdir -p ../images
         docker cp devcontainer:/workspace/artifacts/ ../images
+        ls ./artifacts
+        ls ../images
     - name: import images in host´s Docker
       run: |
         docker load --input ../images/orderprocessor.tar
