@@ -1,4 +1,5 @@
-name: Main - Release Helm Chart IoT Edge Accelerator L2
+name: Main - Upload Apps Images/Packages
+
 on: 
   push:
     branches: 
