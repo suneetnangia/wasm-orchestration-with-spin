@@ -35,10 +35,15 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    - name: copy images to a folder that is not part ot the mounted workspace
+      run: |
+        rm -rf ../images
+        mkdir -p ../images
+        docker cp devcontainer:/workspace/artifacts/ ../images
     - name: import images in host´s Docker
       run: |
-        docker load --input ./artifacts/orderprocessor.tar
-        docker load --input ./artifacts/fulfilmentprocessor.tar
+        docker load --input ../images/orderprocessor.tar
+        docker load --input ../images/fulfilmentprocessor.tar
     - name: get version and push image orderprocessor 
       run: |
         cd ./apps/orderprocessor
