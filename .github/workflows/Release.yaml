@@ -1,0 +1,34 @@
+name: Main - Release Helm Chart IoT Edge Accelerator L2
+on: 
+  push:
+    branches: 
+      - main
+    paths:
+      # Only run this when chart file is updated.
+      - 'apps/**'
+
+jobs:
+  Build-Code:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: download code
+      with:
+        fetch-depth: 0
+    - name: build the devcontainer image
+      run: |
+        docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
+    - name: run the devcontainer image
+      run: |
+        cd ..
+        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace}},target=/workspace devcontainer
+    - name: install tools
+      run: |
+        docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
+    - name: login to ghcr.io
+      run: |
+        docker exec devcontainer sh -c "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+    - name: install cluster and workloads
+      run: |
+        docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_push_app_images"
+  

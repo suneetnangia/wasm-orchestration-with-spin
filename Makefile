@@ -1,21 +1,17 @@
 K3DCLUSTERNAME := wasm-cluster
+K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d
 DOCKERDIR := ./wasm-shims/deployments/k3d
-TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
 APPSDIR := ./apps
 
 all: build_k3d_node_image create_k3d_cluster install_redis deploy_app run_integrationtest
 
 build_k3d_node_image:
-	@echo "Copying spin shim..."
-	mkdir -p $(TMPSPINDIR)
-	cp -p ./apps/runtime/containerd-shim-spin-v1 $(TMPSPINDIR)/containerd-shim-spin-v1
-
-	@echo "Building k3d image..."
-	docker build -t k3d-shim -f $(DOCKERDIR)/Dockerfile $(DOCKERDIR)
+	@echo "Pull k3d shim image from deislab´s ghcr..."
+	docker pull $(K3DSHIMIMAGENAME)
 
 create_k3d_cluster:
 	@echo "Creating k3d cluster..."
-	k3d cluster create $(K3DCLUSTERNAME) --image k3d-shim --api-port 6551 -p '8001:30010@loadbalancer' -p '8002:80@loadbalancer' --servers 1
+	k3d cluster create $(K3DCLUSTERNAME) --image $(K3DSHIMIMAGENAME) --api-port 6551 -p '8001:30010@loadbalancer' -p '8002:80@loadbalancer' --servers 1
 	@echo "Loading spin runtime..."
 	kubectl apply -f ./apps/runtime/runtime.yaml
 
@@ -43,15 +39,14 @@ run_integrationtest:
 
 test: clean all
 
-save_images: all
-	@echo "Saving apps images as artifacts..."
-	sh ./deployment/save-image.sh orderprocessor $(APPSDIR)
-	sh ./deployment/save-image.sh fulfilmentprocessor $(APPSDIR)
+build_push_app_images:
+	@echo "Build and push apps images to registry..."
+	sh ./deployment/build-push-workload-image.sh orderprocessor $(APPSDIR)
+	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor $(APPSDIR)
 
 clean:
 	@echo "Cleaning up..."
 	k3d cluster delete $(K3DCLUSTERNAME)
-	rm -rf $(TMPSPINDIR)
 	cargo clean
 	rm -rf ./apps/orderprocessor/target
 	rm -rf ./apps/orderprocessor/.spin
