@@ -1,4 +1,7 @@
 #! /bin/bash
+IMAGENAME=ghcr.io/$3/$1
+LABEL=org.opencontainers.image.source=https://github.com/$3/$4
+
 cd $2/$1
 
 # build the app
@@ -9,13 +12,12 @@ cp -r ../../target .
 VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
 
 # build the docker image
-docker buildx build -f Dockerfile -t $1:$VERSION . --load --platform=wasi/wasm32 --provenance=false
+docker buildx build -f Dockerfile -t $IMAGENAME:$VERSION -l $LABEL --load --platform=wasi/wasm32 --provenance=false .
 
 # tag the docker image
-docker tag $1:$VERSION $1:latest
+docker tag $IMAGENAME:$VERSION $IMAGENAME:latest
 
-# save the docker image
-mkdir -p ../../artifacts
-docker save -o ../../artifacts/$1.tar $1:$VERSION
+docker push $IMAGENAME:$VERSION
+docker push $IMAGENAME:$latest
 
 cd ../..

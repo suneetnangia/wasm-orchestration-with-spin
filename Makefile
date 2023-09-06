@@ -2,6 +2,8 @@ K3DCLUSTERNAME := wasm-cluster
 K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d
 DOCKERDIR := ./wasm-shims/deployments/k3d
 APPSDIR := ./apps
+GITHUBORG := azure-samples
+GITHUBREPO := wasm-orchestration-with-spin
 
 all: build_k3d_node_image create_k3d_cluster install_redis deploy_app run_integrationtest
 
@@ -39,10 +41,10 @@ run_integrationtest:
 
 test: clean all
 
-build_save_app_images:
+build_push_app_images:
 	@echo "Build and save apps images to artifacts folder..."
-	sh ./deployment/build-save-workload-image.sh orderprocessor $(APPSDIR)
-	sh ./deployment/build-save-workload-image.sh fulfilmentprocessor $(APPSDIR)
+	sh ./deployment/build-push-workload-image.sh orderprocessor $(APPSDIR) $(GITHUBORG) $(GITHUBREPO)
+	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor $(APPSDIR) $(GITHUBORG) $(GITHUBREPO)
 
 clean:
 	@echo "Cleaning up..."
