@@ -4,9 +4,9 @@ on:
   push:
     branches: 
       - main
-    paths:
+    # paths:
       # Only run this when apps are updated.
-      - 'apps/**'
+      # - 'apps/**'
     
 jobs:
   Release-Apps-Images:
@@ -28,7 +28,7 @@ jobs:
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
     - name: log in to the Container registry
       run: |
-        docker exec devcontainer sh -c "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+        docker exec devcontainer sh -c "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUBPAT }}"
     - name: push workload images
       run: |
         docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_push_app_images GITHUBORG=${{ github.repository_owner }} GITHUBREPO=${{ github.repository }}"
