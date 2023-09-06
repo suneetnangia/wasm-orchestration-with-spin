@@ -4,9 +4,9 @@ on:
   push:
     branches: 
       - main
-    # paths:
+    paths:
       # Only run this when apps are updated.
-      # - 'apps/**'
+      - 'apps/**'
     
 jobs:
   Release-Apps-Images:
@@ -24,7 +24,7 @@ jobs:
     - name: run the devcontainer image
       run: |
         cd ..
-        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace}},target=/workspace devcontainer
+        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace }},target=/workspace devcontainer
     - name: install tools
       run: |
         docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
