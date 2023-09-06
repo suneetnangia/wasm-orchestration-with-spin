@@ -4,5 +4,3 @@ kind: RuntimeClass
 metadata:
   name: wasmtime-spin
 handler: spin
-
-
