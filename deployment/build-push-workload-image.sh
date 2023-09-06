@@ -12,7 +12,7 @@ cp -r ../../target .
 VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
 
 # build the docker image
-docker buildx build -f Dockerfile -t $IMAGENAME:$VERSION -l $LABEL --load --platform=wasi/wasm32 --provenance=false .
+docker buildx build -f Dockerfile -t $IMAGENAME:$VERSION --label $LABEL --load --platform=wasi/wasm32 --provenance=false .
 
 # tag the docker image
 docker tag $IMAGENAME:$VERSION $IMAGENAME:latest
