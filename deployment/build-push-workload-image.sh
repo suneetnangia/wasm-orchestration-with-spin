@@ -20,6 +20,6 @@ docker buildx build -f Dockerfile -t $IMAGENAME:$VERSION --label $LABEL --load -
 docker tag $IMAGENAME:$VERSION $IMAGENAME:latest
 
 docker push $IMAGENAME:$VERSION
-docker push $IMAGENAME:$latest
+docker push $IMAGENAME:latest
 
 cd ../..
