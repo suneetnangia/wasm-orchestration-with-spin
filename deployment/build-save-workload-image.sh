@@ -1,6 +1,6 @@
 #! /bin/bash
-IMAGENAME=ghcr.io/$3/$1
-LABEL=org.opencontainers.image.source=https://github.com/$3/$4
+IMAGENAME=$(echo ghcr.io/$3/$1 | tr '[:upper:]' '[:lower:]')
+LABEL=$(echo org.opencontainers.image.source=https://github.com/$3/$4 | tr '[:upper:]' '[:lower:]')
 
 cd $2/$1
 
