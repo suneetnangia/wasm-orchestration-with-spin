@@ -1,15 +1,9 @@
 K3DCLUSTERNAME := wasm-cluster
-K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d
+K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.0
 DOCKERDIR := ./wasm-shims/deployments/k3d
 APPSDIR := ./apps
-GITHUBORG := azure-samples
-GITHUBREPO := wasm-orchestration-with-spin
 
-all: build_k3d_node_image create_k3d_cluster install_redis deploy_app run_integrationtest
-
-build_k3d_node_image:
-	@echo "Pull k3d shim image from deislab´s ghcr..."
-	docker pull $(K3DSHIMIMAGENAME)
+all: create_k3d_cluster install_redis deploy_app run_integrationtest
 
 create_k3d_cluster:
 	@echo "Creating k3d cluster..."
@@ -40,6 +34,11 @@ run_integrationtest:
 	cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
+
+fmt:
+	@echo "Checking formatting of code..."
+	cargo fmt --all -- --check
+	cargo clippy --all-targets --all-features --workspace -- --deny=warnings
 
 build_push_app_images:
 	@echo "Build and save apps images to artifacts folder..."

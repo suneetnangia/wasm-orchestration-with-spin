@@ -5,7 +5,7 @@ use spin_sdk::{
     http::{Request, Response},
     http_component, redis,
 };
-use std::{env::var, io::Read};
+use std::env::var;
 
 // The environment variable is set in `spin.toml` that points to the
 // address of the Redis server that the component will publish

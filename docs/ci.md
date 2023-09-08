@@ -1,4 +1,4 @@
-# Continuous Integration
+# Continuous Integration (CI)
 
 This documents describes the CI process for the solution - in partucular for the Spin apps.
 
@@ -6,7 +6,7 @@ This documents describes the CI process for the solution - in partucular for the
 
 The workflow [PR](../.github/workflows/PR.yaml) is used as a validation pipeline for pull requests created against the main branch.
 
-The job contains the generation and setup of the devcontainer including the docker-in-docker installation. That is required to build the wasm apps because it can be configured to use the containerd runtime for pulling and storing images as explaining in the [Docker-In-Docker](../docs/ci.md#docker-in-docker) section.
+The job contains the generation and setup of the devcontainer including the docker-in-docker installation. That is required to build the wasm apps because it can be configured to use the containerd runtime for pulling and storing images as explaining in the [Docker-In-Docker](../docs/dev.md#docker-in-docker) section.
 The pipeline also configures the k3d cluster and deploys the apps into the cluster. The apps are validated by running the integration tests as part of the makefile experience.
 
 ## Release Pipeline
