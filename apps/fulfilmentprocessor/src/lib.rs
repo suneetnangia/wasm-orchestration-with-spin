@@ -1,8 +1,8 @@
 use anyhow::Result;
 use bytes::Bytes;
 use order_management::Order;
-use std::env::var;
 use spin_sdk::{redis, redis_component};
+use std::env::var;
 use std::str::from_utf8;
 
 // The environment variable set in `spin.toml` that points to the

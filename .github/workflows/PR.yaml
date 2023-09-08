@@ -11,15 +11,8 @@ jobs:
       name: download code
       with:
         fetch-depth: 0
-    - name: build the devcontainer image
-      run: |
-        docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
-    - name: run the devcontainer image
-      run: |
-        docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace}},target=/workspace devcontainer
-    - name: install tools
-      run: |
-        docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
+    - name: build the devcontainer
+      uses: ./.github/actions/build-devcontainer
     # export of cargo path in each step is required because it is not when exported in bootstraph.sh script
     - name: install cluster and workloads
       run: |
