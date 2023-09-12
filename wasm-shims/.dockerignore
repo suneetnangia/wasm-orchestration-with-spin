@@ -1,8 +1,0 @@
-.git
-.tmp
-target
-*/target*
-test
-images
-.dockerignore
-.gitignore

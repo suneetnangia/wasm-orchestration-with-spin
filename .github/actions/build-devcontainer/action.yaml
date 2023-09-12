@@ -1,0 +1,17 @@
+name: Create and setup devcontainer
+description: Create and setup devcontainer
+runs:
+  using: "composite"
+  steps:
+  - name: build the devcontainer image
+    run: |
+      docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
+    shell: bash
+  - name: run the devcontainer image
+    run: |
+      docker run --name devcontainer -d --rm --privileged --mount type=bind,source=${{ github.workspace}},target=/workspace devcontainer
+    shell: bash
+  - name: install tools
+    run: |
+      docker exec devcontainer sh ./workspace/.devcontainer/bootstrap.sh
+    shell: bash

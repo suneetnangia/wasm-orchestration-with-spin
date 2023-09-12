@@ -1,0 +1,31 @@
+name: Main - Upload Apps Images/Packages
+
+on: 
+  push:
+    branches: 
+      - main
+    paths:
+      # Only run this when apps are updated.
+      - 'apps/**'
+      - '!apps/runtime/**'
+    
+jobs:
+  Release-Apps-Images:
+    # grant packages write permission to GITHUB_TOKEN to push images outside the workflow (within devcontainer image)
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: download code
+      with:
+        fetch-depth: 0
+    - name: build the devcontainer
+      uses: ./.github/actions/build-devcontainer
+    - name: log in to the container registry
+      run: |
+        docker exec devcontainer sh -c "docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}"
+    # export of cargo path in each step is required because it is not when exported in bootstraph.sh script
+    - name: push workload images
+      run: |
+        docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make build_push_app_images GITHUBORG=${{ github.repository_owner }} GITHUBREPO=${{ github.repository }}"

@@ -1,0 +1,19 @@
+name: Main Branch PR
+on: 
+  pull_request:
+    branches:
+      - main
+jobs:
+  Build-Code:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: download code
+      with:
+        fetch-depth: 0
+    - name: build the devcontainer
+      uses: ./.github/actions/build-devcontainer
+    # export of cargo path in each step is required because it is not when exported in bootstraph.sh script
+    - name: install cluster and workloads
+      run: |
+        docker exec devcontainer sh -c "export PATH="/root/.cargo/bin:$PATH" && cd ./workspace && make fmt && make"

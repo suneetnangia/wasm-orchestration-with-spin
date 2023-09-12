@@ -6,6 +6,9 @@ $PATHRUSTUP/rustup update stable && $PATHRUSTUP/rustup default stable && $PATHRU
 # Installs wasm32 compiler targets
 $PATHRUSTUP/rustup target add wasm32-wasi wasm32-unknown-unknown
 
+# export path to cargo bin
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # Install Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 

@@ -1,21 +1,13 @@
 K3DCLUSTERNAME := wasm-cluster
+K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.0
 DOCKERDIR := ./wasm-shims/deployments/k3d
-TMPSPINDIR := ./wasm-shims/deployments/k3d/.tmp
 APPSDIR := ./apps
 
-all: build_k3d_node_image create_k3d_cluster install_redis deploy_app run_integrationtest
-
-build_k3d_node_image:
-	@echo "Copying spin shim..."
-	mkdir -p $(TMPSPINDIR)
-	cp -p ./apps/runtime/containerd-shim-spin-v1 $(TMPSPINDIR)/containerd-shim-spin-v1
-
-	@echo "Building k3d image..."
-	docker build -t k3d-shim -f $(DOCKERDIR)/Dockerfile $(DOCKERDIR)
+all: create_k3d_cluster install_redis deploy_app run_integrationtest
 
 create_k3d_cluster:
 	@echo "Creating k3d cluster..."
-	k3d cluster create $(K3DCLUSTERNAME) --image k3d-shim --api-port 6551 -p '8001:30010@loadbalancer' -p '8002:80@loadbalancer' --servers 1
+	k3d cluster create $(K3DCLUSTERNAME) --image $(K3DSHIMIMAGENAME) --api-port 6551 -p '8001:30010@loadbalancer' -p '8002:80@loadbalancer' --servers 1
 	@echo "Loading spin runtime..."
 	kubectl apply -f ./apps/runtime/runtime.yaml
 
@@ -43,10 +35,19 @@ run_integrationtest:
 
 test: clean all
 
+fmt:
+	@echo "Checking formatting of code..."
+	cargo fmt --all -- --check
+	cargo clippy --all-targets --all-features --workspace -- --deny=warnings
+
+build_push_app_images:
+	@echo "Build and save apps images to artifacts folder..."
+	sh ./deployment/build-push-workload-image.sh orderprocessor $(APPSDIR) $(GITHUBORG) $(GITHUBREPO)
+	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor $(APPSDIR) $(GITHUBORG) $(GITHUBREPO)
+
 clean:
 	@echo "Cleaning up..."
 	k3d cluster delete $(K3DCLUSTERNAME)
-	rm -rf $(TMPSPINDIR)
 	cargo clean
 	rm -rf ./apps/orderprocessor/target
 	rm -rf ./apps/orderprocessor/.spin
