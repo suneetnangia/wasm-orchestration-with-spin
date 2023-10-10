@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fulfilmentprocessor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fulfilmentprocessor
+  template:
+    metadata:
+      labels:
+        app: fulfilmentprocessor
+    spec:
+      runtimeClassName: wasmtime-spin
+      containers:
+        - name: fulfilmentprocessor
+          image: fulfilmentprocessor:0.1.0
+          imagePullPolicy: Never
+          command: ["/"]

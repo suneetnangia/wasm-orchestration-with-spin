@@ -1,8 +1,12 @@
 [workspace]
 # If more Spin apps are added to the solution, they should be referenced here.
 members = [    
-    "apps/orderprocessor/receiver",
-    "apps/orderprocessor/statusprovider",
-    "apps/fulfilmentprocessor",
+    "apps/mqtt/orderprocessor/receiver",
+    "apps/mqtt/orderprocessor/statusprovider",
+    "apps/mqtt/fulfilmentprocessor",
+    "apps/redis/orderprocessor/receiver",
+    "apps/redis/orderprocessor/statusprovider",
+    "apps/redis/fulfilmentprocessor",
     "crates/order-management"
 ]
+resolver = "2"
