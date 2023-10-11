@@ -1,6 +1,5 @@
 {
-    "rust-analyzer.linkedProjects": [
-        "wasm-shims/Cargo.toml",
+    "rust-analyzer.linkedProjects": [        
         "Cargo.toml",
         "tests/Cargo.toml",
         "crates/order-management/Cargo.toml",
