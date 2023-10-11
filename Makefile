@@ -9,7 +9,7 @@ APPSDIRRUNTIME := ./apps/runtime
 
 all: mqtt_communication
 
-mqtt_communication: create_k3d_cluster install_redis install_mosquitto deploy_app run_integrationtest
+mqtt_communication: create_k3d_cluster upgrade_spin_shim install_redis install_mosquitto deploy_app run_integrationtest
 
 redis_communication: create_k3d_cluster install_redis deploy_app run_integrationtest
 
