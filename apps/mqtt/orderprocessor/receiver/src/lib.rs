@@ -7,6 +7,11 @@ use spin_sdk::{
 };
 use std::env::var;
 
+
+// The environment variable is set in `spin.toml` that points to the
+// address of the Redis broker that the component will update KV to.
+const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
+
 // The environment variable is set in `spin.toml` that points to the
 // address of the Mosquitto broker that the component will publish
 // a message to.
@@ -19,8 +24,9 @@ const MOSQUITTO_TOPIC_ENV: &str = "MQTT_TOPIC";
 // New order processing component.
 #[http_component]
 fn handle_receiver(req: Request) -> Result<Response> {
-    let address = var(MOSQUITTO_ADDRESS_ENV)?;
-    let topic = var(MOSQUITTO_TOPIC_ENV)?;
+    let redis_address = var(REDIS_ADDRESS_ENV)?;
+    let mqtt_address = var(MOSQUITTO_ADDRESS_ENV)?;
+    let mqtt_topic = var(MOSQUITTO_TOPIC_ENV)?;
 
     // Generate random order id
     // TODO: we will move this function to another wasm component as a nano service.
@@ -46,10 +52,10 @@ fn handle_receiver(req: Request) -> Result<Response> {
     let payload = serde_json::to_string(&order)?;
 
     // Update order status in Redis KV store.
-    redis::set(&address, &order_id.to_string(), order.status.as_bytes()).unwrap();
+    redis::set(&redis_address, &order_id.to_string(), order.status.as_bytes()).unwrap();
 
     // Publish to Mosquitto
-    mqtt::publish(&address, mqtt::Qos::AtLeastOnce, &topic, payload.as_bytes(),).unwrap();
+    mqtt::publish(&mqtt_address, mqtt::Qos::AtLeastOnce, &mqtt_topic, payload.as_bytes(),).unwrap();
 
     Ok(http_response)
 }

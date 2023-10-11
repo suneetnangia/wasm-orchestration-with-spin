@@ -12,6 +12,6 @@ source = "target/wasm32-wasi/release/fulfilmentprocessor_mqtt.wasm"
 environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379" }
 allowed_http_hosts = []
 [component.trigger]
-topic="messages-in"
+topic="neworders"
 [component.build]
 command = "cargo build --target wasm32-wasi --release"

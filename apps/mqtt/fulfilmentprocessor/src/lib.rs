@@ -6,8 +6,7 @@ use std::env::var;
 use std::str::from_utf8;
 
 // The environment variable set in `spin.toml` that points to the
-// address of the Redis server that the component will publish
-// a message to.
+// address of the Redis server that the component will update KV to.
 const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 
 #[mqtt_component]
