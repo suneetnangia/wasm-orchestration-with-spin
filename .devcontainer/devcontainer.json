@@ -23,7 +23,7 @@
 		"vscode": {
 			"extensions": [
 				"rust-lang.rust-analyzer",
-				"bungcip.better-toml",
+				"tamasfe.even-better-toml",
 				"vadimcn.vscode-lldb",
 				"usernamehw.errorlens",
 				"gruntfuggly.todo-tree",				
