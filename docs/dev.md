@@ -20,6 +20,7 @@ Ensure Docker Engine or Docker Desktop is installed on your machine to create th
 <details>
 
   <summary>Docker In Docker Alternative</summary>
+
   > **Note**: if there are problems with the docker-in-docker use, you can enable the ["Use Containerd for pulling and storing images"](https://docs.docker.com/desktop/containerd/) feature in the Docker Desktop settings. Accordingly, the feature to use the Docker of the host machine needs to be activated in the devcontainer.json file and the image can be referenced directly, e.g. as follows:
 
 ```json
@@ -47,7 +48,7 @@ Repo contains the [devcontainer](../.devcontainer/devcontainer.json) setup that 
 - [rust](https://www.rust-lang.org/), rustup and wasm32-wasi target
 - [spin](https://www.fermyon.com/spin): framework and dev tool for building WebAssembly (nano) services
 - [k3d](https://k3d.io/): lightweight wrapper that runs a k3s cluster in docker
-- [kubeclt](https://kubernetes.io/docs/reference/kubectl/): Kubernetes command line tool
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/): Kubernetes command line tool
 - [helm](https://helm.sh/): Kubernetes package manager based on helm charts
 - ...
 
@@ -57,25 +58,35 @@ Just start the Dev Container by clicking the double-arrow icon in the bottom lef
 
 #### Initial Setup
 
-Run the `make` command in root of the repo.
+Run the `make` command in root of the repo to deploy the k3d cluster and workloads using mqtt for communication between the apps. If you rather prefer to utilize pub/sub communication via Redis, run `make redis_communication` instead.
 
 This command does the following:
 
 1. Deploys k3d cluster called **wasm-cluster** including Spin's Containerd shim on the nodes.
-2. Deploys Redis-Stack as a pod, which contains Redis server and web UI.
+2. Deploys communication infrastructure (Redis and Mosquitto).
+    - Deploys Mosquitto Mqtt Broker as a pod.
+    - Deploys Redis-Stack as a pod, which contains Redis server and web UI.
 3. Deploys workload apps which demonstrate a simple asynchronous order process.
-4. Forwards ports to the host machine to allow http endpoints of apps (port 8002) and Redis-Stack UX (port 8001) can be accessed via localhost.
+4. Forwards ports to the host machine to allow http endpoints of apps (port 8002) and Mosquitto Mqtt Broker (port 1883) or Redis-Stack UX (port 8001) can be accessed via localhost.
 
 ##### (optionally) Single Spin App Change Loop
 
 Follow these steps to test your changes quickly, when you make iterative changes to Spin apps:
 
-1. Increment the version in the spin.toml in the app folder, e.g. `apps/orderprocessor/spin.toml`
-2. Run the `make` command in the app folder, e.g. `apps/orderprocessor`.
+1. Increment the version in the spin.toml in the app folder, e.g. `apps/mqtt/orderprocessor/spin.toml`
+2. Run the `make` command in the app folder, e.g. `apps/mqtt/orderprocessor`.
 
 We read the version from the spin.toml file, update the deploy.yaml and use this version as new image tag for the Spin app that is going to be imported and deployed into the k3d cluster.
 
-#### Test the Sample Workloads (`Make Test` coming soon)
+#### Test the Sample Workloads
+
+##### Automated Test
+
+You can simply run `make run_integration_tests` to run the automated integration tests against the deployed workloads.
+
+If you changed anything in your implemention, you can run `make test` to clean the cluster and re-deploy the whole solution including a final run of the integration test.
+
+##### Manual Test
 
 Test the sample solution **from the host machine** as follows:
 

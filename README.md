@@ -18,15 +18,15 @@ Following components are the key parts of this solution (arrows show data flow):
 ![Order Processing Solution](images/order-processing.png "Order Processing Solution")
 
 1. Kubernetes Cluster: a local kubernetes cluster (K3d) running both Wasm containers and standard OCI containers as pods.
-2. Spin Shim: a Containerd shim for running Spin apps, updated the Spin shim which includes both http and redis triggers.
+2. Spin Shim: a Containerd shim for running Spin apps, updated the Spin shim which includes Http, Mqtt and Redis triggers.
 3. Spin Apps:
    Spin apps are packaged as OCI container images but Spin shim extracts the Spin config and binaries from it before running the apps directly, containers are only used for packaging Spin apps, not execution.
     1. Order Processor App:
        An app to receive new order and order status requests on http endpoints, contains two wasm components:
-       * Receiver: implements Http Accept/202 pattern to acknowledge new order request immediately and publishes order message on Redis pub/sub.
+       * Receiver: implements Http Accept/202 pattern to acknowledge new order request immediately and publishes order message to Mosquitto mqtt broker or on Redis pub/sub.
        * Status Provider: returns order status for the order Id provided in query string (e.g. <http://localhost/order/839284>), by referencing order's current status in Redis KV store.
     2. Fulfilment Processor App:
-       An app to receive published new order message from Redis pub/sub and update status to 'fulfilled' in Redis KV store.
+       An app to receive published new order message from Mosquitto mqtt broker or Redis pub/sub and update status to 'fulfilled' in Redis KV store.
 
 ## Codespaces and Local Development/Deployment
 
@@ -36,7 +36,7 @@ Please refer to [dev setup document](docs/dev.md) setup of the solution (no clou
 
 ## Potentially Reduced Network Hops Approach
 
-Order Processor App's components interact with each other using Spin SDKs (for KV, Redis or Http) which requires network hops. This approach allows decoupling these components via messaging (Redis) or contract first approach (Http REST), and enables cross network placement of these components. On the flip side though, by introducing network to communicate between the components even when these components reside in the same Spin app/host, additional overheads become inevitable.
+Order Processor App's components interact with each other using Spin SDKs (for KV, Mqtt, Redis or Http) which requires network hops. This approach allows decoupling these components via messaging (Mqtt or Redis) or contract first approach (Http REST), and enables cross network placement of these components. On the flip side though, by introducing network to communicate between the components even when these components reside in the same Spin app/host, additional overheads become inevitable.
 
 Drawing some parallels here from code level and service level design patterns, intra Spin orchestration of components can be considered as nano services which do not need to cross the boundary of network but still need to be composed together to form a business logic. By not involving network, we avoid the complex compensation logic (idempotency, circuit-breaker) in absence of transactions and serialization-deserialization of messages. Should we not need to expose these events to external (to Spin app) entities or there's a need for async communication, we really do not need to cross the network boundary here.
 
