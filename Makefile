@@ -38,7 +38,7 @@ install_mosquitto:
 	@echo "Installing mosquito..."
 	helm upgrade --install mosquitto ./deployment/mosquitto --namespace mosquitto --create-namespace --wait
 
-deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor
+deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor deploy_app_orderstatusprovider
 
 deploy_app_orderprocessor:
 	@echo "Deploying order processor app..."
@@ -47,6 +47,10 @@ deploy_app_orderprocessor:
 deploy_app_fulfilmentprocessor:
 	@echo "Deploying fulfilment processor app..."
 	sh ./deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
+
+deploy_app_orderstatusprovider:
+	@echo "Deploying orderstatusprovider processor app..."
+	sh ./deployment/build-deploy-workload.sh orderstatusprovider $(K3DCLUSTERNAME) ./apps/shared
 
 run_integrationtest:
 	@echo "Running integration test..."
@@ -67,6 +71,7 @@ build_push_app_images:
 	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor-mqtt ./apps/mqtt $(GITHUBORG) $(GITHUBREPO)
 	sh ./deployment/build-push-workload-image.sh orderprocessor-redis ./apps/redis $(GITHUBORG) $(GITHUBREPO)
 	sh ./deployment/build-push-workload-image.sh fulfilmentprocessor-redis ./apps/redis $(GITHUBORG) $(GITHUBREPO)
+	sh ./deployment/build-push-workload-image.sh orderstatusprovider ./apps/shared $(GITHUBORG) $(GITHUBREPO)
 
 clean:
 	@echo "Cleaning up..."
@@ -76,8 +81,10 @@ clean:
 	rm -rf ./apps/mqtt/orderprocessor/.spin
 	rm -rf ./apps/mqtt/fulfilmentprocessor/target
 	rm -rf ./apps/mqtt/fulfilmentprocessor/.spin
-	rm -rf ./apps/redis/orderprocessor/target
-	rm -rf ./apps/redis/orderprocessor/.spin
 	rm -rf ./apps/redis/fulfilmentprocessor/target
 	rm -rf ./apps/redis/fulfilmentprocessor/.spin
+	rm -rf ./apps/redis/orderprocessor/target
+	rm -rf ./apps/redis/orderprocessor/.spin
+	rm -rf ./apps/shared/orderstatusprovider/target
+	rm -rf ./apps/shared/orderstatusprovider/.spin
 	rm -rf ./tests/target
