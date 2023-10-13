@@ -20,7 +20,7 @@ Following components are the key parts of this solution (arrows show data flow):
 1. Kubernetes Cluster: a local kubernetes cluster (K3d) running both Wasm containers and standard OCI containers as pods.
 2. Spin Shim: a Containerd shim for running Spin apps, updated the Spin shim which includes Http, Mqtt and Redis triggers.
 3. Spin Apps:
-   Spin apps are packaged as OCI container images but Spin shim extracts the Spin config and binaries from it before running the apps directly, containers are only used for packaging Spin apps, not execution.
+   Spin apps are packaged as OCI container* images but Spin shim extracts the Spin config and binaries from it before running the apps directly, containers are only used for packaging Spin apps, not execution.
     1. Order Processor App:
        An app to receive new order and order status requests on http endpoints, contains two wasm components:
        * Receiver: implements Http Accept/202 pattern to acknowledge new order request immediately and publishes order message to Mosquitto mqtt broker or on Redis pub/sub.
