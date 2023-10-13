@@ -12,20 +12,20 @@ use std::env::var;
 const REDIS_ADDRESS_ENV: &str = "REDIS_ADDRESS";
 
 // The environment variable is set in `spin.toml` that points to the
-// address of the Mosquitto broker that the component will publish
+// address of the mqtt broker that the component will publish
 // a message to.
-const MOSQUITTO_ADDRESS_ENV: &str = "MQTT_ADDRESS";
+const MQTT_ADDRESS_ENV: &str = "MQTT_ADDRESS";
 
 // The environment variable is set in `spin.toml` that specifies
-// the Mosquitto topic that the component will publish to.
-const MOSQUITTO_TOPIC_ENV: &str = "MQTT_TOPIC";
+// the mqtt topic that the component will publish to.
+const MQTT_TOPIC_ENV: &str = "MQTT_TOPIC";
 
 // New order processing component.
 #[http_component]
 fn handle_receiver(req: Request) -> Result<Response> {
     let redis_address = var(REDIS_ADDRESS_ENV)?;
-    let mqtt_address = var(MOSQUITTO_ADDRESS_ENV)?;
-    let mqtt_topic = var(MOSQUITTO_TOPIC_ENV)?;
+    let mqtt_address = var(MQTT_ADDRESS_ENV)?;
+    let mqtt_topic = var(MQTT_TOPIC_ENV)?;
 
     // Generate random order id
     // TODO: we will move this function to another wasm component as a nano service.
@@ -58,7 +58,7 @@ fn handle_receiver(req: Request) -> Result<Response> {
     )
     .unwrap();
 
-    // Publish to Mosquitto
+    // Publish to mqtt broker.
     mqtt::publish(
         &mqtt_address,
         mqtt::Qos::AtLeastOnce,

@@ -3,7 +3,7 @@ APPSDIR := ./..
 
 k3s_build_deploy:
 	@echo "Deploying fulfilment processor app..."
-	sh ../../deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
+	sh ../../../deployment/build-deploy-workload.sh fulfilmentprocessor $(K3DCLUSTERNAME) $(APPSDIR)
 
 clean:
 	rm -rf ./target
