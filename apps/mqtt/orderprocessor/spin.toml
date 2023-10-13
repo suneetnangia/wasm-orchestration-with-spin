@@ -1,0 +1,30 @@
+# spin_manifest_version = "1"
+# Spin shim for Containerd supports only old version tag
+spin_version = "1"
+authors = ["Suneet Nangia <suneetnangia@gmail.com>"]
+description = "Order processor application in Spin"
+name = "orderprocessor"
+trigger = { type = "http", base = "/order" }
+version = "0.7.1"
+
+[[component]]
+id = "receiver"
+source = "./target/wasm32-wasi/release/receiver_mqtt.wasm"
+# Ip address is statically configured in redis service yaml
+environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379", MQTT_ADDRESS = "mqtt://10.43.236.145:1883", MQTT_TOPIC = "neworders" }
+allowed_http_hosts = []
+[component.trigger]
+route = "/"
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
+
+[[component]]
+id = "statusprovider"
+source = "./target/wasm32-wasi/release/statusprovider_mqtt.wasm"
+# Ip address is statically configured in redis service yaml
+environment = { REDIS_ADDRESS = "redis://10.43.236.144:6379" }
+allowed_http_hosts = []
+[component.trigger]
+route = "/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"

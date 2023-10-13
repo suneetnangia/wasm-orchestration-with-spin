@@ -8,7 +8,7 @@ cd $2/$1
 
 # build the app
 spin build
-cp -r ../../target .
+cp -r ../../../target .
 
 # get the version from the spin.toml file
 VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
@@ -22,4 +22,4 @@ docker tag $IMAGENAME:$VERSION $IMAGENAME:latest
 docker push $IMAGENAME:$VERSION
 docker push $IMAGENAME:latest
 
-cd ../..
+cd ../../..

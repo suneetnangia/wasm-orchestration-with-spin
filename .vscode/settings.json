@@ -1,5 +1,5 @@
 {
-    "rust-analyzer.linkedProjects": [        
+    "rust-analyzer.linkedProjects": [
         "Cargo.toml",
         "tests/Cargo.toml",
         "crates/order-management/Cargo.toml",

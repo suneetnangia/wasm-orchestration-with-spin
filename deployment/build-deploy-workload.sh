@@ -3,7 +3,7 @@ cd $3/$1
 
 # build the app
 spin build
-cp -r ../../target .
+cp -r ../../../target .
 
 # get the version from the spin.toml file
 VERSION=`grep ^version spin.toml | cut -d'"' -f 2`
@@ -24,4 +24,4 @@ if test -f "./service.yaml"; then
     kubectl apply -f service.yaml
 fi
 
-cd ../..
+cd ../../..

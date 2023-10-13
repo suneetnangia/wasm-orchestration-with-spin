@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "mosquitto.fullname" . }}
+  labels: {{- include "mosquitto.labels" . | nindent 4 }}
+{{- with .Values.service.annotations }}
+  annotations:
+  {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+{{- end }}
+spec:
+  type: {{ .Values.service.type }}
+{{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+{{- end }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  clusterIP: {{ .Values.service.clusterIPAddress }}
+{{- with .Values.ports }}
+  ports:
+  {{- range $key, $value := . }}
+    - name: {{ $key }}
+      port: {{ $value.port }}
+    {{- if $value.nodePort }}
+      nodePort: {{ $value.nodePort }}
+    {{- end }}
+      targetPort: {{ $value.port }}
+      protocol: {{ default "TCP" $value.protocol }}
+  {{- end }}
+{{- end }}
+{{- if .Values.monitoring.sidecar.enabled }}
+    - name: prometheus
+      port: {{ .Values.monitoring.sidecar.port }}
+    {{- if .Values.monitoring.sidecar.nodePort }}
+      nodePort: {{ .Values.monitoring.sidecar.nodePort }}
+    {{- end }}
+      targetPort: prometheus
+      protocol: TCP
+{{- end }}
+  selector: {{- include "mosquitto.selector" . | nindent 4 }}

@@ -9,3 +9,4 @@ debug/
 crt.pem
 spin.sig
 spininstall/
+.tmp/
