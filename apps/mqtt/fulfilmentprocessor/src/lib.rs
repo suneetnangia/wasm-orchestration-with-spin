@@ -1,7 +1,7 @@
 use anyhow::Result;
 use bytes::Bytes;
 use order_management::Order;
-use spin_sdk::{redis, mqtt_component};
+use spin_sdk::{mqtt_component, redis};
 use std::env::var;
 use std::str::from_utf8;
 

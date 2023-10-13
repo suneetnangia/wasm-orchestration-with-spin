@@ -3,10 +3,9 @@ use order_management::{HttpAcceptTask, Order, OrderAccepted};
 use rand::Rng;
 use spin_sdk::{
     http::{Request, Response},
-    http_component, redis, mqtt,
+    http_component, mqtt, redis,
 };
 use std::env::var;
-
 
 // The environment variable is set in `spin.toml` that points to the
 // address of the Redis broker that the component will update KV to.
@@ -52,10 +51,21 @@ fn handle_receiver(req: Request) -> Result<Response> {
     let payload = serde_json::to_string(&order)?;
 
     // Update order status in Redis KV store.
-    redis::set(&redis_address, &order_id.to_string(), order.status.as_bytes()).unwrap();
+    redis::set(
+        &redis_address,
+        &order_id.to_string(),
+        order.status.as_bytes(),
+    )
+    .unwrap();
 
     // Publish to Mosquitto
-    mqtt::publish(&mqtt_address, mqtt::Qos::AtLeastOnce, &mqtt_topic, payload.as_bytes(),).unwrap();
+    mqtt::publish(
+        &mqtt_address,
+        mqtt::Qos::AtLeastOnce,
+        &mqtt_topic,
+        payload.as_bytes(),
+    )
+    .unwrap();
 
     Ok(http_response)
 }
