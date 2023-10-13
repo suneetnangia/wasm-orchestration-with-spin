@@ -50,7 +50,7 @@ deploy_app_fulfilmentprocessor:
 
 run_integrationtest:
 	@echo "Running integration test..."
-	cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
+	RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
 
