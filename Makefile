@@ -24,7 +24,7 @@ upgrade_spin_shim:
 	k3d cluster stop $(K3DCLUSTERNAME)
 	docker cp -a $(APPSDIRRUNTIME)/containerd-shim-spin-v1 k3d-$(K3DCLUSTERNAME)-server-0:/bin/containerd-shim-spin-v1
 	k3d cluster start $(K3DCLUSTERNAME)
-	docker exec -it k3d-$(K3DCLUSTERNAME)-server-0 chmod -R 500 ./bin/containerd-shim-spin-v1
+	docker exec k3d-$(K3DCLUSTERNAME)-server-0 chmod -R 500 ./bin/containerd-shim-spin-v1
 
 install_redis:
 	@echo "Installing redis..."
