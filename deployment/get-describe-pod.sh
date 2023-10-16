@@ -6,3 +6,5 @@ echo "====================DESCRIBE===================="
 kubectl describe pods/$POD
 echo "======================LOGS======================"
 kubectl logs $POD
+echo "====================DISK SIZE==================="
+df -H
