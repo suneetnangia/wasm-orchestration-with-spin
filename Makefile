@@ -56,9 +56,6 @@ deploy_app_orderstatusprovider:
 
 run_integrationtest:
 	@echo "Running integration test..."
-	@echo "#################################"
-	sh ./deployment/get-describe-pod.sh
-	@echo "#################################"
 	RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
