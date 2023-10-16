@@ -2,7 +2,7 @@ name: Main Branch PR
 on: 
   pull_request:
     branches:
-      - feature/extract-orderstatusprovider
+      - main
 jobs:
   Build-Code:
     runs-on: ubuntu-latest
