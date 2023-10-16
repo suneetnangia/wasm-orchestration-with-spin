@@ -1,3 +1,4 @@
+#! /bin/bash
 K3DCLUSTERNAME := wasm-cluster
 K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.1
 DOCKERDIR := ./wasm-shims/deployments/k3d
@@ -54,10 +55,10 @@ deploy_app_orderstatusprovider:
 
 run_integrationtest:
 	@echo "Running integration test..."
-	@echo "###########################"
-	kubectl describe pods/$(kubectl get pods | awk '/orderpro/ {print $1;exit}')
-	@echo "###########################"
-	RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
+	@echo "###################################################################"
+	sh ./deployment/get-describe-pod.sh
+	@echo "###################################################################"
+	# RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
 
