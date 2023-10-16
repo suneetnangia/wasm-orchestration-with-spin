@@ -1,3 +1,4 @@
+#! /bin/bash
 K3DCLUSTERNAME := wasm-cluster
 K3DSHIMIMAGENAME := ghcr.io/deislabs/containerd-wasm-shims/examples/k3d:v0.9.1
 DOCKERDIR := ./wasm-shims/deployments/k3d
@@ -39,6 +40,7 @@ install_mosquitto:
 	helm upgrade --install mosquitto ./deployment/mosquitto --namespace mosquitto --create-namespace --wait
 
 deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor deploy_app_orderstatusprovider
+	rm -r target
 
 deploy_app_orderprocessor:
 	@echo "Deploying order processor app..."
