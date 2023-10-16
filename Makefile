@@ -54,6 +54,9 @@ deploy_app_orderstatusprovider:
 
 run_integrationtest:
 	@echo "Running integration test..."
+	@echo "###########################"
+	kubectl describe pods/$(kubectl get pods | awk '/orderpro/ {print $1;exit}')
+	@echo "###########################"
 	RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
