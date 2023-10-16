@@ -40,6 +40,7 @@ install_mosquitto:
 	helm upgrade --install mosquitto ./deployment/mosquitto --namespace mosquitto --create-namespace --wait
 
 deploy_app: deploy_app_orderprocessor deploy_app_fulfilmentprocessor deploy_app_orderstatusprovider
+	rm -r target
 
 deploy_app_orderprocessor:
 	@echo "Deploying order processor app..."
@@ -58,7 +59,7 @@ run_integrationtest:
 	@echo "###################################################################"
 	sh ./deployment/get-describe-pod.sh
 	@echo "###################################################################"
-	# RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
+	RUST_BACKTRACE=full cargo test --manifest-path ./tests/Cargo.toml --package integrationtest --lib -- create_order_test --exact --nocapture
 
 test: clean all
 
