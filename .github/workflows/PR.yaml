@@ -1,6 +1,8 @@
 name: Main Branch PR
 on: 
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - feature/extract-orderstatusprovider
 jobs:
   Build-Code:
     runs-on: ubuntu-latest
