@@ -3,6 +3,10 @@ description: Create and setup devcontainer
 runs:
   using: "composite"
   steps:
+  - name: size
+    run: |
+      df -H
+    shell: bash
   - name: build the devcontainer image
     run: |
       docker build -t devcontainer -f .devcontainer/Dockerfile ./.devcontainer
