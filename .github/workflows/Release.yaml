@@ -3,7 +3,7 @@ name: Main - Upload Apps Images/Packages
 on: 
   push:
     branches: 
-      - main
+      - feature/actions
     paths:
       # Only run this when apps are updated.
       - 'apps/**'
