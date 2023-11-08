@@ -1,10 +1,22 @@
 #! /bin/bash
+DELIMETER="-"
+FOLDER=$1
+
+PREFIX=${APPNAME%%$DELIMETER*}
+INDEX=${#PREFIX}
+ 
+if [[ INDEX -ne ${#APPNAME} ]];
+then
+    echo "Index of substring in string : $INDEX"
+    FOLDER=$(echo ${FOLDER:0:INDEX})
+fi
+
 # image name/tag must include the Github organization  to be pushed to the Github Container Registry (GHCR)
 IMAGENAME=$(echo ghcr.io/$3/$1 | tr '[:upper:]' '[:lower:]')
 # label including the Github organization and repository is required to connect it to the right Github repository
 LABEL=$(echo org.opencontainers.image.source=https://github.com/$4 | tr '[:upper:]' '[:lower:]')
 
-cd $2/$1
+cd $2/$FOLDER
 
 # build the app
 spin build
