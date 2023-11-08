@@ -4,8 +4,6 @@ FOLDER=$1
 
 FOLDER=${FOLDER%%$DELIMETER*}
 
-echo "Folder: $FOLDER"
-
 # image name/tag must include the Github organization  to be pushed to the Github Container Registry (GHCR)
 IMAGENAME=$(echo ghcr.io/$3/$1 | tr '[:upper:]' '[:lower:]')
 # label including the Github organization and repository is required to connect it to the right Github repository
