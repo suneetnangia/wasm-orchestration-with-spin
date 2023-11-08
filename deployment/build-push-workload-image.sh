@@ -4,7 +4,7 @@ FOLDER=$1
 
 PREFIX=${FOLDER%%$DELIMETER*}
 INDEX=${#PREFIX}
- 
+
 if [[ INDEX -ne ${#FOLDER} ]];
 then
     FOLDER=$(echo ${FOLDER:0:$INDEX})
