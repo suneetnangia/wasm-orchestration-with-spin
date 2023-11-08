@@ -2,13 +2,8 @@
 DELIMETER="-"
 FOLDER=$1
 
-PREFIX=${FOLDER%%$DELIMETER*}
-INDEX=${#PREFIX}
+FOLDER=${FOLDER%%$DELIMETER*}
 
-if [[ INDEX -ne ${#FOLDER} ]];
-then
-    FOLDER=$(echo ${FOLDER:0:$INDEX})
-fi
 echo "Folder: $FOLDER"
 
 # image name/tag must include the Github organization  to be pushed to the Github Container Registry (GHCR)
