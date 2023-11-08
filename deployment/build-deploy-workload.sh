@@ -23,7 +23,8 @@ rm -r tmp
 # replace the image in the deployment file
 yq -y -Y --in-place "if .spec.template.spec.containers[]? then  .spec.template.spec.containers[].image=\"$1:$VERSION\" else . end" deploy.yaml
 kubectl apply -f deploy.yaml
-if test -f "./service.yaml"; then
+if test -f "./service.yaml"; 
+then
     kubectl apply -f service.yaml
 fi
 

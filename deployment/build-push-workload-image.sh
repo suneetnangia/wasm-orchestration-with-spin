@@ -2,13 +2,12 @@
 DELIMETER="-"
 FOLDER=$1
 
-PREFIX=${APPNAME%%$DELIMETER*}
+PREFIX=${FOLDER%%$DELIMETER*}
 INDEX=${#PREFIX}
  
-if [ $INDEX -ne ${#APPNAME} ];
+if [[ INDEX -ne ${#FOLDER} ]];
 then
-    echo "Index of substring in string : $INDEX"
-    FOLDER=$(echo ${FOLDER:0:INDEX})
+    FOLDER=$(echo ${FOLDER:0:$INDEX})
 fi
 echo "Folder: $FOLDER"
 exit 0
