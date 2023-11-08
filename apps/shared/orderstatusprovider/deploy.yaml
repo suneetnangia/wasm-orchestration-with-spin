@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderstatusprovider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderstatusprovider
+  template:
+    metadata:
+      labels:
+        app: orderstatusprovider
+    spec:
+      runtimeClassName: wasmtime-spin
+      containers:
+        - name: orderstatusprovider
+          image: orderstatusprovider:0.7.1
+          imagePullPolicy: Never
+          command: ["/"]

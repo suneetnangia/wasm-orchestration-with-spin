@@ -56,7 +56,7 @@ fn handle_receiver(req: Request) -> Result<Response> {
 
 fn generate_http_accept_response(order_id: u32) -> OrderAccepted {
     let task = HttpAcceptTask {
-        href: format!("/order/{}", order_id),
+        href: format!("/orderstatus/{}", order_id),
         id: order_id,
         status: "created".to_string(),
     };
