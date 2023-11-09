@@ -28,3 +28,4 @@ spec:
               service:
                 name: orderprocessor
                 port:
+                  number: 80      
