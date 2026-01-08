@@ -18,7 +18,7 @@ fn handle_statusprovider(req: Request) -> Result<Response> {
 
     // Extract order Id from http query string.
     let query_string = req.uri().path();
-    let order_id = query_string.split_terminator('/').last().unwrap();
+    let order_id = query_string.split_terminator('/').next_back().unwrap();
 
     println!("Received Order Id: {}", order_id);
 

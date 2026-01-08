@@ -4,7 +4,7 @@ PATHRUSTUP=$HOME/.cargo/bin
 $PATHRUSTUP/rustup update stable && $PATHRUSTUP/rustup default stable && $PATHRUSTUP/rustup component add clippy rustfmt
 
 # Installs wasm32 compiler targets
-$PATHRUSTUP/rustup target add wasm32-wasi wasm32-unknown-unknown
+$PATHRUSTUP/rustup target add wasm32-wasip1 wasm32-unknown-unknown
 
 # export path to cargo bin
 export PATH="$HOME/.cargo/bin:$PATH"

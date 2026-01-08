@@ -15,7 +15,7 @@ docker save -o tmp/$1.tar $1:$VERSION
 
 # import the image into the k3d cluster
 k3d image import tmp/$1.tar -c $2
-docker rmi $1:$VERSION
+# docker rmi $1:$VERSION
 rm -r target
 rm -r .spin
 rm -r tmp

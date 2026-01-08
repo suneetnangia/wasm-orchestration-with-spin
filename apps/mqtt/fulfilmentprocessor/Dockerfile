@@ -4,4 +4,4 @@ COPY . .
 
 FROM scratch
 COPY --from=build /workspaces/wasm-orchestration-with-spin/apps/mqtt/fulfilmentprocessor/spin.toml .
-COPY --from=build /workspaces/wasm-orchestration-with-spin/apps/mqtt/fulfilmentprocessor/target/wasm32-wasi/release/fulfilmentprocessor_mqtt.wasm ./target/wasm32-wasi/release/fulfilmentprocessor_mqtt.wasm
+COPY --from=build /workspaces/wasm-orchestration-with-spin/apps/mqtt/fulfilmentprocessor/target/wasm32-wasip1/release/fulfilmentprocessor_mqtt.wasm ./target/wasm32-wasip1/release/fulfilmentprocessor_mqtt.wasm
